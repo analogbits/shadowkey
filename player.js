@@ -272,8 +272,30 @@ async function boot() {
   }, 1000);
 }
 
+function unlockAudio() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+      if (!window.__globalAudioCtx) {
+        window.__globalAudioCtx = new AudioContext();
+      }
+      if (window.__globalAudioCtx.state === 'suspended') {
+        window.__globalAudioCtx.resume().catch(() => {});
+      }
+    }
+    if (window.__ekAudio?.ctx && window.__ekAudio.ctx.state === 'suspended') {
+      window.__ekAudio.ctx.resume().catch(() => {});
+    }
+  } catch (e) {}
+}
+
+['touchstart', 'touchend', 'pointerdown', 'click'].forEach(evt => {
+  window.addEventListener(evt, unlockAudio, { passive: true });
+});
+
 if ($('start')) {
   $('start').onclick = () => {
+    unlockAudio();
     $('start').hidden = true;
     if (navigator.locks) {
       navigator.locks.request('ynnarg-shadowkey-saves', {ifAvailable: true}, async lock => {
@@ -378,23 +400,55 @@ for (const name of ['keydown', 'keyup']) {
   }, true);
 }
 
-// On-screen clickable buttons
+// On-screen clickable buttons with robust multi-touch support
 document.querySelectorAll('[data-scan]').forEach(button => {
   button.disabled = true;
+  const scan = Number(button.dataset.scan);
+  if (!scan) return;
+
+  const activePointers = new Set();
+
+  const press = (pointerId) => {
+    unlockAudio();
+    activePointers.add(pointerId);
+    keyDown(scan, 'btn:' + scan + ':' + pointerId);
+    button.classList.add('pressed');
+  };
+
+  const release = (pointerId) => {
+    activePointers.delete(pointerId);
+    keyUp('btn:' + scan + ':' + pointerId);
+    if (activePointers.size === 0) {
+      button.classList.remove('pressed');
+    }
+  };
+
   button.addEventListener('pointerdown', e => {
     e.preventDefault();
-    button.setPointerCapture(e.pointerId);
-    window.__ekAudio?.ctx?.resume();
-    keyDown(Number(button.dataset.scan), 'pointer:' + e.pointerId);
-    button.classList.add('pressed');
-    $('canvas')?.focus({preventScroll:true});
+    try { button.setPointerCapture(e.pointerId); } catch {}
+    press(e.pointerId);
   });
-  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
-    button.addEventListener(event, () => {
-      keyUp('pointer:' + button.dataset.scan);
-      button.classList.remove('pressed');
-    });
-  }
+
+  button.addEventListener('pointerup', e => {
+    e.preventDefault();
+    release(e.pointerId);
+  });
+
+  button.addEventListener('pointercancel', e => {
+    e.preventDefault();
+    release(e.pointerId);
+  });
+
+  button.addEventListener('lostpointercapture', e => {
+    release(e.pointerId);
+  });
+
+  button.addEventListener('pointerleave', e => {
+    if (!button.hasPointerCapture || !button.hasPointerCapture(e.pointerId)) {
+      release(e.pointerId);
+    }
+  });
+
   button.addEventListener('contextmenu', e => e.preventDefault());
 });
 
@@ -413,7 +467,7 @@ if ($('pause')) {
 if ($('sound')) {
   $('sound').onclick = () => {
     muted = !muted;
-    window.__ekAudio?.ctx?.resume();
+    unlockAudio();
     call('wasm_set_volume', null, ['number'], [muted ? 0 : 100]);
     $('sound').textContent = muted ? 'Unmute' : 'Mute';
     $('sound').setAttribute('aria-pressed', String(muted));
@@ -423,11 +477,21 @@ if ($('sound')) {
 if ($('fullscreen')) {
   $('fullscreen').onclick = async () => {
     try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else if ($('stage')) await $('stage').requestFullscreen();
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) await document.webkitExitFullscreen();
+        document.body.classList.remove('mobile-fullscreen');
+      } else if ($('stage') && ($('stage').requestFullscreen || $('stage').webkitRequestFullscreen)) {
+        if ($('stage').requestFullscreen) await $('stage').requestFullscreen();
+        else if ($('stage').webkitRequestFullscreen) await $('stage').webkitRequestFullscreen();
+      } else {
+        document.body.classList.toggle('mobile-fullscreen');
+        window.scrollTo(0, 0);
+      }
       $('canvas')?.focus({preventScroll:true});
     } catch {
-      if ($('message')) $('message').textContent = 'Fullscreen is unavailable in this browser.';
+      document.body.classList.toggle('mobile-fullscreen');
+      window.scrollTo(0, 0);
     }
   };
 }

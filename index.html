@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="The Elder Scrolls Travels: Shadowkey for Nokia N-Gage. Play in your web browser with local save support.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Shadowkey">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0d1017">
+  <link rel="apple-touch-icon" href="cover.jpg">
+  <meta name="description" content="The Elder Scrolls Travels: Shadowkey for Nokia N-Gage. Play in your web browser or on mobile with touch controls and local save support.">
   <title>The Elder Scrolls Travels: Shadowkey</title>
   <!-- Configure coi-serviceworker to use require-corp for Safari/WebKit & Chromium compatibility -->
   <script>
@@ -20,8 +26,8 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=4">
-  <script src="player.js" defer></script>
+  <link rel="stylesheet" href="player.css?v=6">
+  <script src="player.js?v=6" defer></script>
 </head>
 <body>
   <header>
@@ -83,54 +89,81 @@
           <span id="status" class="status-text" role="status">Ready</span>
         </div>
 
+        <!-- Quick Utility Bar for mobile and desktop -->
+        <div class="quick-bar" aria-label="Game Quick Bar">
+          <button data-scan="164" class="quick-btn" title="System Menu (esc / Q)">📜 Menu</button>
+          <button data-scan="165" class="quick-btn" title="Inventory (tab / E)">🎒 Inv</button>
+          <button data-scan="49" class="quick-btn" title="Map & Journal (M / 1)">🗺️ Map</button>
+          <button data-scan="51" class="quick-btn" title="Character Stats (C / 3)">📊 Stats</button>
+          <button data-scan="57" class="quick-btn" title="Rest / Camp (R / 9)">🏕️ Rest</button>
+        </div>
+
         <!-- Handheld Keypad Deck -->
         <div class="controls-deck" aria-label="Virtual Controls">
           
-          <!-- D-Pad -->
-          <div class="dpad" aria-label="Directional pad">
-            <span></span>
-            <button data-scan="16" aria-label="Up">▲</button>
-            <span></span>
-            <button data-scan="14" aria-label="Left">◀</button>
-            <button data-scan="167" aria-label="Confirm / OK">OK</button>
-            <button data-scan="15" aria-label="Right">▶</button>
-            <span></span>
-            <button data-scan="17" aria-label="Down">▼</button>
-            <span></span>
-          </div>
-
-          <!-- Middle Softkeys & Quick Attack -->
-          <div class="center-actions">
-            <div class="softkeys-row">
-              <button data-scan="164" title="Left softkey (System menu: esc or Q)">Menu (esc / Q)</button>
-              <button data-scan="165" title="Right softkey (Inventory: tab or E)">Inv (tab / E)</button>
+          <!-- Left Wing: Directional D-Pad -->
+          <div class="deck-wing deck-left">
+            <div class="dpad" aria-label="Directional pad">
+              <span></span>
+              <button data-scan="16" aria-label="Walk Forward / Up">▲</button>
+              <span></span>
+              <button data-scan="14" aria-label="Strafe Left">◀</button>
+              <button data-scan="167" class="dpad-ok" aria-label="Confirm / OK">OK</button>
+              <button data-scan="15" aria-label="Strafe Right">▶</button>
+              <span></span>
+              <button data-scan="17" aria-label="Walk Backward / Down">▼</button>
+              <span></span>
             </div>
-            <button class="big-action-btn btn-attack" data-scan="167" title="Attack / Action (space or return)">
-              ⚔️ Attack (space)
-            </button>
-            <button class="big-action-btn btn-magic" data-scan="55" title="Cast active spell (F or 7)">
-              ✨ Cast Spell (F)
-            </button>
           </div>
 
-          <!-- Number Keypad -->
-          <div class="numpad" aria-label="N-Gage numeric keypad">
-            <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Map (M)</span></button>
-            <button data-scan="50"><span class="num-val">2</span><span class="num-tag">Up (I)</span></button>
-            <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Stats (C)</span></button>
-            
-            <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Turn L (J)</span></button>
-            <button data-scan="53" class="active"><span class="num-val">5</span><span class="num-tag">Action</span></button>
-            <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Turn R (L)</span></button>
-            
-            <button data-scan="55"><span class="num-val">7</span><span class="num-tag">Spell (F)</span></button>
-            <button data-scan="56"><span class="num-val">8</span><span class="num-tag">Down (K)</span></button>
-            <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Rest (R)</span></button>
-            
-            <button data-scan="133"><span class="num-val">*</span><span class="num-tag">[</span></button>
-            <button data-scan="48"><span class="num-val">0</span><span class="num-tag">0</span></button>
-            <button data-scan="127"><span class="num-val">#</span><span class="num-tag">]</span></button>
+          <!-- Right Wing: Action Combat & Camera Controls -->
+          <div class="deck-wing deck-right">
+            <div class="action-grid">
+              <!-- Camera Turn Row -->
+              <div class="action-row">
+                <button data-scan="52" class="cam-btn" title="Turn Left (J / 4)">↺ Turn L</button>
+                <button data-scan="54" class="cam-btn" title="Turn Right (L / 6)">↻ Turn R</button>
+              </div>
+
+              <!-- Main Combat Action Row -->
+              <div class="action-row primary-actions">
+                <button data-scan="167" class="big-action-btn btn-attack" title="Attack / Interact (Space / Enter / 5)">
+                  ⚔️ Attack
+                </button>
+                <button data-scan="55" class="big-action-btn btn-magic" title="Cast Spell (F / 7)">
+                  ✨ Spell
+                </button>
+              </div>
+
+              <!-- Camera Look Row -->
+              <div class="action-row">
+                <button data-scan="50" class="cam-btn" title="Look Up (I / 2)">👁️ Look ▲</button>
+                <button data-scan="56" class="cam-btn" title="Look Down (K / 8)">👁️ Look ▼</button>
+              </div>
+            </div>
           </div>
+
+          <!-- Classic N-Gage Keypad Drawer -->
+          <details class="numpad-drawer" id="numpad-drawer">
+            <summary class="drawer-summary">🔢 Vintage N-Gage Keypad</summary>
+            <div class="numpad" aria-label="N-Gage numeric keypad">
+              <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Map</span></button>
+              <button data-scan="50"><span class="num-val">2</span><span class="num-tag">Up</span></button>
+              <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Stats</span></button>
+              
+              <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Turn L</span></button>
+              <button data-scan="53" class="active"><span class="num-val">5</span><span class="num-tag">Action</span></button>
+              <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Turn R</span></button>
+              
+              <button data-scan="55"><span class="num-val">7</span><span class="num-tag">Spell</span></button>
+              <button data-scan="56"><span class="num-val">8</span><span class="num-tag">Down</span></button>
+              <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Rest</span></button>
+              
+              <button data-scan="133"><span class="num-val">*</span><span class="num-tag">[</span></button>
+              <button data-scan="48"><span class="num-val">0</span><span class="num-tag">0</span></button>
+              <button data-scan="127"><span class="num-val">#</span><span class="num-tag">]</span></button>
+            </div>
+          </details>
 
         </div>
 

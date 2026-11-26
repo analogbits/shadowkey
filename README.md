@@ -1,24 +1,23 @@
-# The Elder Scrolls Travels: Shadowkey (Web Version)
+# The Elder Scrolls Travels: Shadowkey (Web & Mobile Edition)
 
-Play **The Elder Scrolls Travels: Shadowkey** (2004, Nokia N-Gage) directly in modern web browsers via WebAssembly.
+Play **The Elder Scrolls Travels: Shadowkey** (2004, Nokia N-Gage) directly in modern web browsers, on Mac/PC, and on iOS / Android mobile devices via WebAssembly.
 
 Hosted online on GitHub Pages: **[https://analogbits.github.io/shadowkey/](https://analogbits.github.io/shadowkey/)**
 
 ---
 
-## What's New in this Build
+## 📱 Mobile & iOS Experience
 
-- **Split Handheld Chassis:** An authentic N-Gage console shell with a dedicated D-Pad & Left Menu wing, upscaled central display, and an Action & Keypad wing.
-- **Natural PC Controls (WASD + Space):** Move with `W/A/S/D` or Arrow Keys, attack with `Space` or `Enter`, cast spells with `7`, and open menus with `Q` and `E`.
-- **Keyboard Badges on Buttons:** Every button shows its corresponding keyboard shortcut and game function directly on the button face.
-- **Integer Upscaling Modes:** One-click toggling between `2x` (352×416), `3x` (528×624, Default), `4x` (704×832), and `Fit Window`.
-- **Retro LCD Filter:** Toggleable authentic retro LCD subpixel grid and scanline overlay.
-- **Persistent Local Saves:** Automatic sync to IndexedDB with one-click JSON backup export and restore.
-- **Zero Click-to-Focus Friction:** Keyboard controls now work seamlessly without requiring you to click inside the canvas first.
+- **Dual-Thumb Virtual Gamepad:** Ergonomic touch controls designed specifically for handheld mobile play. Left thumb controls walk & strafe D-Pad; right thumb controls camera turning (`↺ Turn L`, `↻ Turn R`), combat (`⚔️ Attack`), spells (`✨ Spell`), and camera tilt (`👁️ Look`).
+- **Quick-Access Utility Bar:** One-tap mobile shortcuts for System Menu, Inventory, Map & Quest Journal, Character Stats, and Resting.
+- **Landscape Handheld Console Mode:** Rotate your phone to landscape for an authentic handheld gaming experience with controls floating neatly on thumb rest positions.
+- **True Multi-Touch:** Walk forward while simultaneously attacking, casting, or turning without stuck keys or dropped inputs.
+- **iOS Safari & PWA Ready:** Add to Home Screen on iPhone/iPad to play fullscreen without browser address bars; includes iOS safe area support for iPhone notch & Dynamic Island.
+- **iOS WebAudio Auto-Unlock:** Resumes audio playback instantly on initial touch gesture.
 
 ---
 
-## Controls (MacBook Pro & Desktop)
+## Controls (MacBook Pro, Desktop & Mobile)
 
 | Action | MacBook Pro / PC Keyboard | Handheld Keypad |
 | :--- | :--- | :--- |
