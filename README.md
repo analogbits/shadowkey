@@ -18,20 +18,36 @@ Hosted online on GitHub Pages: **[https://analogbits.github.io/shadowkey/](https
 
 ---
 
-## Controls
+## Controls (MacBook Pro & Desktop)
 
-| Action | PC Keyboard | Handheld Keypad |
+| Action | MacBook Pro / PC Keyboard | Handheld Keypad |
 | :--- | :--- | :--- |
 | **Move / Walk / Strafe** | <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> | D-Pad |
-| **Attack / Confirm / Action** | <kbd>Space</kbd> or <kbd>Enter</kbd> | Keypad **5** or Center **OK** |
-| **Cast Active Spell** | <kbd>7</kbd> | Keypad **7** |
-| **Look Up / Look Down** | <kbd>2</kbd> / <kbd>8</kbd> | Keypad **2** / **8** |
-| **Turn Left / Turn Right** | <kbd>4</kbd> / <kbd>6</kbd> | Keypad **4** / **6** |
-| **Map & Quest Log** | <kbd>1</kbd> | Keypad **1** |
-| **Character Stats** | <kbd>3</kbd> | Keypad **3** |
-| **Rest / Camp** | <kbd>9</kbd> | Keypad **9** |
-| **Left Softkey (System Menu)** | <kbd>Q</kbd> or <kbd>F1</kbd> | Left Menu button |
-| **Right Softkey (Inventory)** | <kbd>E</kbd> or <kbd>F2</kbd> or <kbd>Esc</kbd> | Right Menu button |
+| **Attack / Confirm / Action** | <kbd>Space</kbd> or <kbd>Return ⏎</kbd> | Keypad **5** or Center **OK** |
+| **Cast Active Spell** | <kbd>F</kbd> (or <kbd>7</kbd>) | Keypad **7** |
+| **Look Up / Look Down** | <kbd>I</kbd> / <kbd>K</kbd> (or <kbd>2</kbd> / <kbd>8</kbd>) | Keypad **2** / **8** |
+| **Turn Left / Turn Right** | <kbd>J</kbd> / <kbd>L</kbd> (or <kbd>4</kbd> / <kbd>6</kbd>) | Keypad **4** / **6** |
+| **System Menu** | <kbd>Esc</kbd> or <kbd>Q</kbd> | Left Menu button |
+| **Inventory** | <kbd>Tab ⇥</kbd> or <kbd>E</kbd> | Right Menu button |
+| **Map & Quest Log** | <kbd>M</kbd> (or <kbd>1</kbd>) | Keypad **1** |
+| **Character Stats** | <kbd>C</kbd> (or <kbd>3</kbd>) | Keypad **3** |
+| **Rest / Camp** | <kbd>R</kbd> (or <kbd>9</kbd>) | Keypad **9** |
+
+---
+
+## ⚡ Developer Cheat Menu
+
+The developer cheat menu built into the original Vir2L engine has been unlocked.
+
+During gameplay, press <kbd>Esc</kbd> or <kbd>Q</kbd> (or click the **Menu** button) to open the in-game options menu, then choose **Cheat Menu**:
+
+- **God Mode:** Toggle complete invulnerability on/off.
+- **Ghost Mode:** Toggle noclip mode to walk through walls and gates.
+- **Gold & Experience:** Instantly give +5,000 Gold, +1,000 EXP, or perform an instant Level Up.
+- **Universal Merchants:** Access any vendor anywhere (Armor, Weapons, Spells, Items, Shields).
+- **All Shadowkeys & Star Teeth:** Instantly obtain all 11 Shadowkeys and 7 Star Teeth quest items.
+- **Teleportation:** Teleport immediately to any town, dungeon, or crypt in Hammerfell/High Rock (Azra's Crossing, Delfhide, Earthtear Caverns, Ghast Pass, Dragonstar West/East, Crypt of Hearts, etc.).
+- **Super Blaze & Heal Wounds:** Max out magicka and learn top-tier spells.
 
 ---
 
