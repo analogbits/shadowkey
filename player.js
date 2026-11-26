@@ -212,7 +212,7 @@ async function boot() {
   await sync(true);
 
   progress(35, 'Loading game data…');
-  const response = await fetch('game.zip.gz');
+  const response = await fetch('game.zip.gz?v=7');
   if (!response.ok || !response.body) throw new Error('The game-data download failed. Reload to retry.');
   extract(new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()));
 
