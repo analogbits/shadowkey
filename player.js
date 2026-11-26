@@ -150,7 +150,7 @@ function setScale(scale) {
   canvas.classList.remove('scale-2x', 'scale-3x', 'scale-4x', 'scale-fit');
   canvas.classList.add('scale-' + scale);
   document.querySelectorAll('[data-scale]').forEach(btn => {
-    btn.classList.toggle('btn-active', btn.dataset.scale === scale);
+    btn.classList.toggle('active', btn.dataset.scale === scale);
   });
   localStorage.setItem('shadowkey-scale', scale);
 }
@@ -163,7 +163,7 @@ function setFilter(filter) {
   canvas.classList.add(filter === 'smooth' ? 'filter-smooth' : 'filter-sharp');
   if (crt) crt.hidden = (filter !== 'crt');
   document.querySelectorAll('[data-filter]').forEach(btn => {
-    btn.classList.toggle('btn-active', btn.dataset.filter === filter);
+    btn.classList.toggle('active', btn.dataset.filter === filter);
   });
   localStorage.setItem('shadowkey-filter', filter);
 }
@@ -404,7 +404,7 @@ if ($('fullscreen')) {
   $('fullscreen').onclick = async () => {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
-      else await $('console-wrapper').requestFullscreen();
+      else if ($('stage')) await $('stage').requestFullscreen();
       $('canvas')?.focus({preventScroll:true});
     } catch {
       if ($('message')) $('message').textContent = 'Fullscreen is unavailable in this browser.';
