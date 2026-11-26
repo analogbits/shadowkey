@@ -279,19 +279,48 @@ function unlockAudio() {
       if (!window.__globalAudioCtx) {
         window.__globalAudioCtx = new AudioContext();
       }
-      if (window.__globalAudioCtx.state === 'suspended') {
+      if (window.__globalAudioCtx.state === 'suspended' || window.__globalAudioCtx.state === 'interrupted') {
         window.__globalAudioCtx.resume().catch(() => {});
       }
     }
-    if (window.__ekAudio?.ctx && window.__ekAudio.ctx.state === 'suspended') {
+    if (window.__ekAudio?.ctx && (window.__ekAudio.ctx.state === 'suspended' || window.__ekAudio.ctx.state === 'interrupted')) {
       window.__ekAudio.ctx.resume().catch(() => {});
     }
   } catch (e) {}
 }
 
+function setPaused(shouldPause) {
+  if (!running) return;
+  paused = Boolean(shouldPause);
+  releaseKeys();
+  call('wasm_set_paused', null, ['number'], [Number(paused)]);
+  if ($('pause')) $('pause').textContent = paused ? 'Resume' : 'Pause';
+  if ($('status')) $('status').textContent = paused ? 'Paused' : 'Running';
+  if ($('pause-overlay')) $('pause-overlay').hidden = !paused;
+  unlockAudio();
+  void persist();
+  if (!paused) {
+    $('canvas')?.focus({preventScroll:true});
+  }
+}
+
 ['touchstart', 'touchend', 'pointerdown', 'click'].forEach(evt => {
   window.addEventListener(evt, unlockAudio, { passive: true });
 });
+
+if ($('pause-overlay')) {
+  $('pause-overlay').addEventListener('pointerdown', e => {
+    e.preventDefault();
+    setPaused(false);
+  });
+}
+
+if ($('stage')) {
+  $('stage').addEventListener('pointerdown', () => {
+    unlockAudio();
+    if (paused) setPaused(false);
+  });
+}
 
 if ($('start')) {
   $('start').onclick = () => {
@@ -311,7 +340,11 @@ if ($('start')) {
 function keyDown(scan, source) {
   clearTimeout(releaseTimers.get(source));
   releaseTimers.delete(source);
-  if (!running || paused || pressed.has(source)) return;
+  if (!running) return;
+  if (paused) {
+    setPaused(false);
+  }
+  if (pressed.has(source)) return;
   if (![...pressed.values()].includes(scan)) call('wasm_send_key', null, ['number', 'number'], [scan, 1]);
   pressed.set(source, scan);
   keyTimes.set(source, performance.now());
@@ -454,13 +487,7 @@ document.querySelectorAll('[data-scan]').forEach(button => {
 
 if ($('pause')) {
   $('pause').onclick = () => {
-    releaseKeys();
-    paused = !paused;
-    call('wasm_set_paused', null, ['number'], [Number(paused)]);
-    $('pause').textContent = paused ? 'Resume' : 'Pause';
-    if ($('status')) $('status').textContent = paused ? 'Paused' : 'Running';
-    void persist();
-    if (!paused) $('canvas')?.focus({preventScroll:true});
+    setPaused(!paused);
   };
 }
 
@@ -505,18 +532,56 @@ if ($('export')) {
   };
 }
 
+// Window focus, sleep/wake, and visibility management
 window.addEventListener('blur', releaseKeys);
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && running) {
-    releaseKeys();
-    paused = true;
-    call('wasm_set_paused', null, ['number'], [1]);
-    if ($('pause')) $('pause').textContent = 'Resume';
-    if ($('status')) $('status').textContent = 'Paused';
-    void persist();
+
+window.addEventListener('focus', () => {
+  unlockAudio();
+  releaseKeys();
+  if (running && paused) {
+    setPaused(false);
   }
 });
+
+window.addEventListener('pageshow', () => {
+  unlockAudio();
+  releaseKeys();
+  if (running && paused) {
+    setPaused(false);
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    releaseKeys();
+    void persist();
+  } else {
+    unlockAudio();
+    releaseKeys();
+    if (running && paused) {
+      setPaused(false);
+    }
+    $('canvas')?.focus({preventScroll:true});
+  }
+});
+
 window.addEventListener('pagehide', () => { releaseKeys(); void persist(); });
+
+// Sleep & system wake watchdog: detect time skips caused by macOS laptop sleep
+let lastHeartbeat = performance.now();
+setInterval(() => {
+  const now = performance.now();
+  const delta = now - lastHeartbeat;
+  lastHeartbeat = now;
+  if (delta > 3500) {
+    log('System wake detected (sleep gap: ' + Math.round(delta / 1000) + 's)');
+    unlockAudio();
+    releaseKeys();
+    if (running) {
+      setPaused(false);
+    }
+  }
+}, 1000);
 
 if ($('diagnose')) {
   $('diagnose').onclick = () => { if (mod) call('wasm_debug_dump'); };

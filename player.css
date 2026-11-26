@@ -176,6 +176,46 @@ canvas.filter-smooth {
   mix-blend-mode: multiply;
 }
 
+/* In-game Pause Overlay */
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 10, 16, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 8;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pause-overlay[hidden] {
+  display: none;
+}
+.pause-badge {
+  background: #151922;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+}
+.pause-badge span {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+.pause-badge small {
+  font-size: 11px;
+  color: #a0aec0;
+}
+
 /* Startup Overlay */
 .overlay {
   position: absolute;

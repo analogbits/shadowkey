@@ -26,8 +26,8 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=7">
-  <script src="player.js?v=7" defer></script>
+  <link rel="stylesheet" href="player.css?v=8">
+  <script src="player.js?v=8" defer></script>
 </head>
 <body>
   <header>
@@ -54,6 +54,12 @@
           <div class="canvas-wrapper">
             <canvas id="canvas" class="scale-3x filter-sharp" width="176" height="208" tabindex="0" aria-label="Shadowkey Display"></canvas>
             <div class="crt-scanlines" id="crt-overlay" hidden></div>
+            <div class="pause-overlay" id="pause-overlay" hidden>
+              <div class="pause-badge">
+                <span>⏸️ GAME PAUSED</span>
+                <small>Click or press any key to resume</small>
+              </div>
+            </div>
           </div>
 
           <div class="overlay" id="overlay">
