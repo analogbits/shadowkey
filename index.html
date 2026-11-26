@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="The Elder Scrolls Travels: Shadowkey for Nokia N-Gage. Play in your web browser with local save support.">
   <title>The Elder Scrolls Travels: Shadowkey (Web)</title>
-  <!-- coi-serviceworker enables SharedArrayBuffer on GitHub Pages by registering COOP/COEP headers -->
+  <!-- Configure coi-serviceworker to use require-corp for Safari/WebKit & Chromium compatibility -->
+  <script>
+    window.coi = {
+      coepCredentialless: () => false,
+      doReload: () => window.location.reload(),
+    };
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!window.crossOriginIsolated) {
+          window.location.reload();
+        }
+      });
+    }
+  </script>
   <script src="coi-serviceworker.js"></script>
   <link rel="stylesheet" href="player.css">
   <script src="player.js" defer></script>

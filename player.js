@@ -97,7 +97,24 @@ $('import').addEventListener('change', async e => {
   } catch (e) { imported = null; $('message').textContent = e.message; }
 });
 async function boot() {
-  if (!crossOriginIsolated || typeof SharedArrayBuffer === 'undefined') throw new Error('This browser could not enable the emulator. Open this page directly over HTTPS in a current browser.');
+  if (!crossOriginIsolated || typeof SharedArrayBuffer === 'undefined') {
+    progress(10, 'Activating security context for emulator…');
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        window.location.reload();
+        return;
+      }
+      try {
+        await navigator.serviceWorker.ready;
+        window.location.reload();
+        return;
+      } catch (e) {
+        setTimeout(() => window.location.reload(), 1000);
+        return;
+      }
+    }
+    throw new Error('This browser could not enable the emulator. Open this page directly over HTTPS in a modern browser (Chrome, Edge, Safari, Firefox).');
+  }
   if (!window.WebAssembly || !window.DecompressionStream) throw new Error('This browser does not support the required emulator features.');
   progress(5, 'Loading emulator…'); await loadScript();
   mod = await createEKA2L1Module({canvas: $('canvas'), noInitialRun: true, locateFile: name => name,
