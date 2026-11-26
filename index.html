@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The Elder Scrolls Travels: Shadowkey for Nokia N-Gage. Play in your web browser with local save support.">
+  <title>The Elder Scrolls Travels: Shadowkey (Web)</title>
+  <!-- coi-serviceworker enables SharedArrayBuffer on GitHub Pages by registering COOP/COEP headers -->
+  <script src="coi-serviceworker.js"></script>
+  <link rel="stylesheet" href="player.css">
+  <script src="player.js" defer></script>
+</head>
+<body>
+  <header>
+    <a class="brand" href="https://github.com/analogbits/shadowkey">analogbits / shadowkey</a>
+    <nav aria-label="Main navigation">
+      <a href="https://github.com/analogbits/shadowkey" target="_blank" rel="noopener">GitHub Repo</a>
+    </nav>
+  </header>
+  <main>
+    <p class="eyebrow">The Elder Scrolls Travels · Nokia N-Gage · 2004</p>
+    <h1>Shadowkey</h1>
+    <div class="game-layout">
+      <section id="player" class="panel" aria-label="Shadowkey player">
+        <div class="stage" id="stage">
+          <canvas id="canvas" width="176" height="208" tabindex="0" aria-label="Shadowkey game screen"></canvas>
+          <div class="overlay" id="overlay">
+            <div class="overlay-inner">
+              <h2 id="overlay-title">The Elder Scrolls Travels: Shadowkey</h2>
+              <p id="overlay-text">Single-player N-Gage RPG running via WebAssembly in your browser. Progress is saved locally. First startup may take 10-20 seconds to unpack game assets.</p>
+              <progress id="progress" max="100" value="0" hidden></progress>
+              <button id="start" class="primary">Start Game</button>
+            </div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button id="pause" disabled>Pause</button>
+          <button id="sound" disabled aria-pressed="false">Mute</button>
+          <button id="fullscreen">Fullscreen</button>
+          <span id="status" class="status" role="status">Ready</span>
+        </div>
+        <div class="keypad" id="keypad" aria-label="Game controls">
+          <div>
+            <div class="softkeys">
+              <button data-scan="164" aria-label="Left soft key">Left menu</button>
+              <button data-scan="165" aria-label="Right soft key">Right menu</button>
+            </div>
+            <div class="dpad">
+              <span></span><button data-scan="16" aria-label="Up">↑</button><span></span>
+              <button data-scan="14" aria-label="Left">←</button>
+              <button data-scan="167" aria-label="Confirm">OK</button>
+              <button data-scan="15" aria-label="Right">→</button>
+              <span></span><button data-scan="17" aria-label="Down">↓</button>
+            </div>
+          </div>
+          <div class="numbers" aria-label="N-Gage keypad">
+            <button data-scan="49">1</button>
+            <button data-scan="50">2</button>
+            <button data-scan="51">3</button>
+            <button data-scan="52">4</button>
+            <button data-scan="53">5</button>
+            <button data-scan="54">6</button>
+            <button data-scan="55">7</button>
+            <button data-scan="56">8</button>
+            <button data-scan="57">9</button>
+            <button data-scan="133" aria-label="Star">*</button>
+            <button data-scan="48">0</button>
+            <button data-scan="127" aria-label="Hash">#</button>
+          </div>
+        </div>
+      </section>
+      <aside class="panel info-panel">
+        <img class="cover" src="cover.jpg" alt="The Elder Scrolls Travels: Shadowkey cover art" width="600" height="900">
+        <div class="game-info">
+          <p><strong>Platform</strong> · Nokia N-Gage</p>
+          <p><strong>Developer</strong> · Vir2L Studios / SilverBack</p>
+          <p><strong>Publisher</strong> · Bethesda Softworks</p>
+          <p><strong>Genre</strong> · 3D First-Person RPG</p>
+        </div>
+      </aside>
+    </div>
+    <section class="panel control-panel">
+      <h2>Controls & Saves</h2>
+      <div class="controls">
+        <p><strong>Arrow keys</strong> · Direction pad<br><strong>Enter</strong> · Confirm / OK<br><strong>F1 / F2</strong> (or Esc) · Left / Right menu</p>
+        <p><strong>0–9</strong> · N-Gage number keys (Actions & Hotkeys)<br><strong>[ / ]</strong> (or * / #) · Star / Hash<br><strong>Backspace</strong> · Clear / Back</p>
+      </div>
+      <p class="save-note">Use <em>Save Game</em> in the in-game menu to save your progress. Saves are retained locally in this browser (IndexedDB). Export a backup before clearing browser data or to transfer saves between devices.</p>
+      <div class="save-tools">
+        <button id="export" disabled>Export saves</button>
+        <label class="file-button">Import saves<input id="import" type="file" accept="application/json,.json"></label>
+      </div>
+      <p id="message" class="messages" role="status"></p>
+      <details class="diagnostics">
+        <summary>Diagnostics</summary>
+        <button id="diagnose">Capture diagnostics</button>
+        <pre id="log"></pre>
+      </details>
+    </section>
+    <footer>
+      <span>THE ELDER SCROLLS TRAVELS: SHADOWKEY</span>
+      <span class="credits">WebAssembly port powered by <a href="https://github.com/zixing131/EKA2L1-WEB" target="_blank" rel="noopener">EKA2L1-WEB</a> · Hosted on <a href="https://github.com/analogbits/shadowkey" target="_blank" rel="noopener">GitHub Pages</a></span>
+    </footer>
+  </main>
+</body>
+</html>
