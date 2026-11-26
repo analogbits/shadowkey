@@ -6,52 +6,42 @@ Hosted online on GitHub Pages: **[https://analogbits.github.io/shadowkey/](https
 
 ---
 
-## Features
+## What's New in this Build
 
-- **Zero Install:** Runs directly in Chrome, Firefox, Safari, and Edge on desktop and mobile.
-- **Hardware Acceleration & WASM:** Powered by a WebAssembly build of the [EKA2L1](https://github.com/EKA2L1/EKA2L1) Symbian OS emulator via [EKA2L1-WEB](https://github.com/zixing131/EKA2L1-WEB).
-- **Persistent Local Saves:** Game progress is automatically synchronized to your browser's IndexedDB storage.
-- **Save Backup & Restore:** Export your game save states as a JSON backup at any time, or import existing saves.
-- **Responsive Controls:** Full physical keyboard bindings, on-screen clickable keypad, and mobile touch support.
-- **GitHub Pages Ready:** Includes `coi-serviceworker.js` to enable `SharedArrayBuffer` and `crossOriginIsolated` on static hosts without server-side header configuration.
+- **Split Handheld Chassis:** An authentic N-Gage console shell with a dedicated D-Pad & Left Menu wing, upscaled central display, and an Action & Keypad wing.
+- **Natural PC Controls (WASD + Space):** Move with `W/A/S/D` or Arrow Keys, attack with `Space` or `Enter`, cast spells with `7`, and open menus with `Q` and `E`.
+- **Keyboard Badges on Buttons:** Every button shows its corresponding keyboard shortcut and game function directly on the button face.
+- **Integer Upscaling Modes:** One-click toggling between `2x` (352×416), `3x` (528×624, Default), `4x` (704×832), and `Fit Window`.
+- **Retro LCD Filter:** Toggleable authentic retro LCD subpixel grid and scanline overlay.
+- **Persistent Local Saves:** Automatic sync to IndexedDB with one-click JSON backup export and restore.
+- **Zero Click-to-Focus Friction:** Keyboard controls now work seamlessly without requiring you to click inside the canvas first.
 
 ---
 
 ## Controls
 
-| Action | Keyboard | On-Screen / Touch |
+| Action | PC Keyboard | Handheld Keypad |
 | :--- | :--- | :--- |
-| **Move / Look (D-Pad)** | <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> (Arrow Keys) | Directional buttons |
-| **Action / Attack / OK** | <kbd>Enter</kbd> | Center **OK** button |
-| **Left Menu (Softkey 1)** | <kbd>F1</kbd> | Left Menu button |
-| **Right Menu (Softkey 2)** | <kbd>F2</kbd> or <kbd>Esc</kbd> | Right Menu button |
-| **Number Keys (1–9, 0)** | <kbd>0</kbd> – <kbd>9</kbd> | Number keypad |
-| **Star (\*) / Hash (#)** | <kbd>[</kbd> / <kbd>]</kbd> (or <kbd>*</kbd> / <kbd>#</kbd>) | <kbd>*</kbd> and <kbd>#</kbd> buttons |
-| **Clear / Back** | <kbd>Backspace</kbd> | — |
+| **Move / Walk / Strafe** | <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> | D-Pad |
+| **Attack / Confirm / Action** | <kbd>Space</kbd> or <kbd>Enter</kbd> | Keypad **5** or Center **OK** |
+| **Cast Active Spell** | <kbd>7</kbd> | Keypad **7** |
+| **Look Up / Look Down** | <kbd>2</kbd> / <kbd>8</kbd> | Keypad **2** / **8** |
+| **Turn Left / Turn Right** | <kbd>4</kbd> / <kbd>6</kbd> | Keypad **4** / **6** |
+| **Map & Quest Log** | <kbd>1</kbd> | Keypad **1** |
+| **Character Stats** | <kbd>3</kbd> | Keypad **3** |
+| **Rest / Camp** | <kbd>9</kbd> | Keypad **9** |
+| **Left Softkey (System Menu)** | <kbd>Q</kbd> or <kbd>F1</kbd> | Left Menu button |
+| **Right Softkey (Inventory)** | <kbd>E</kbd> or <kbd>F2</kbd> or <kbd>Esc</kbd> | Right Menu button |
 
 ---
 
-## How to Enable on GitHub Pages
+## Display & Upscaling Presets
 
-1. In your GitHub repository (`analogbits/shadowkey`), click on **Settings** (top tab).
-2. On the left sidebar, click **Pages** (under *Code and automation*).
-3. Under **Build and deployment**:
-   - **Source**: Select `Deploy from a branch`
-   - **Branch**: Select `main` and folder `/ (root)`
-   - Click **Save**
-4. Wait 1–2 minutes for GitHub Actions to build and deploy.
-5. Your game will be live at:
-   ```
-   https://analogbits.github.io/shadowkey/
-   ```
-
----
-
-## Technical Details
-
-- **WASM Core:** `eka2l1.wasm` and `eka2l1.js` compiled via Emscripten.
-- **COOP/COEP Headers:** Emscripten's multithreading and high-performance audio/video loops require `SharedArrayBuffer`. Because GitHub Pages does not allow custom response headers, [`coi-serviceworker.js`](https://github.com/gzuidhof/coi-serviceworker) is used to intercept requests and inject `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` on the fly.
-- **Storage:** Mounts the Emscripten IDBFS filesystem at `/eka2l1/drives/c`, maintaining persistent saves between sessions.
+- **2x (352×416):** Compact integer scale.
+- **3x (528×624):** Default balanced high-resolution integer scale for laptops and desktop monitors.
+- **4x (704×832):** Maximum high-res crisp integer presentation.
+- **Fit:** Proportional aspect-ratio fit matching browser window dimensions.
+- **Sharp vs. LCD vs. Smooth:** Switch between pixel-perfect nearest neighbor, authentic backlit LCD matrix scanlines, or smoothed bilinear filtering.
 
 ---
 

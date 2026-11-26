@@ -25,94 +25,265 @@
 </head>
 <body>
   <header>
-    <a class="brand" href="https://github.com/analogbits/shadowkey">analogbits / shadowkey</a>
+    <a class="brand" href="https://github.com/analogbits/shadowkey">
+      analogbits <span>/ shadowkey</span>
+    </a>
     <nav aria-label="Main navigation">
       <a href="https://github.com/analogbits/shadowkey" target="_blank" rel="noopener">GitHub Repo</a>
     </nav>
   </header>
+
   <main>
-    <p class="eyebrow">The Elder Scrolls Travels · Nokia N-Gage · 2004</p>
-    <h1>Shadowkey</h1>
-    <div class="game-layout">
-      <section id="player" class="panel" aria-label="Shadowkey player">
-        <div class="stage" id="stage">
-          <canvas id="canvas" width="176" height="208" tabindex="0" aria-label="Shadowkey game screen"></canvas>
-          <div class="overlay" id="overlay">
-            <div class="overlay-inner">
-              <h2 id="overlay-title">The Elder Scrolls Travels: Shadowkey</h2>
-              <p id="overlay-text">Single-player N-Gage RPG running via WebAssembly in your browser. Progress is saved locally. First startup may take 10-20 seconds to unpack game assets.</p>
-              <progress id="progress" max="100" value="0" hidden></progress>
-              <button id="start" class="primary">Start Game</button>
+    <div class="header-banner">
+      <p class="eyebrow">The Elder Scrolls Travels · Nokia N-Gage · 2004</p>
+      <h1>Shadowkey</h1>
+    </div>
+
+    <!-- Quick Controls Cheat Sheet (Always Visible) -->
+    <div class="controls-hud-bar">
+      <div class="hud-item">
+        <span>🎮 Move:</span>
+        <span class="hud-badge">W A S D</span> or <span class="hud-badge">↑ ↓ ← →</span>
+      </div>
+      <div class="hud-item">
+        <span>⚔️ Attack / Action:</span>
+        <span class="hud-badge">Space</span> or <span class="hud-badge">Enter</span>
+      </div>
+      <div class="hud-item">
+        <span>✨ Cast Spell:</span>
+        <span class="hud-badge">7</span>
+      </div>
+      <div class="hud-item">
+        <span>📜 System Menu:</span>
+        <span class="hud-badge">Q</span> or <span class="hud-badge">F1</span>
+      </div>
+      <div class="hud-item">
+        <span>🎒 Inventory:</span>
+        <span class="hud-badge">E</span> or <span class="hud-badge">F2</span>
+      </div>
+    </div>
+
+    <!-- N-Gage Handheld Console Chassis -->
+    <div class="console-wrapper" id="console-wrapper">
+      <div class="console-layout">
+        
+        <!-- Left Deck: D-Pad & Left Menu -->
+        <div class="deck left-deck">
+          <div class="deck-title">D-PAD & MENU</div>
+          <button class="softkey-btn" data-scan="164" aria-label="Left soft key (Menu)">
+            <span class="btn-main">MENU</span>
+            <span class="btn-sub">[Q / F1]</span>
+          </button>
+          
+          <div class="dpad">
+            <span></span>
+            <button data-scan="16" aria-label="Move Up" class="dpad-btn">
+              <span class="dpad-arrow">▲</span>
+              <span class="btn-sub">W / ↑</span>
+            </button>
+            <span></span>
+
+            <button data-scan="14" aria-label="Move Left" class="dpad-btn">
+              <span class="dpad-arrow">◀</span>
+              <span class="btn-sub">A / ←</span>
+            </button>
+            <button data-scan="167" aria-label="Confirm / OK" class="dpad-btn dpad-center">
+              <span class="dpad-center-label">OK</span>
+              <span class="btn-sub">Enter</span>
+            </button>
+            <button data-scan="15" aria-label="Move Right" class="dpad-btn">
+              <span class="dpad-arrow">▶</span>
+              <span class="btn-sub">D / →</span>
+            </button>
+
+            <span></span>
+            <button data-scan="17" aria-label="Move Down" class="dpad-btn">
+              <span class="dpad-arrow">▼</span>
+              <span class="btn-sub">S / ↓</span>
+            </button>
+            <span></span>
+          </div>
+
+          <button class="quick-action-btn attack-btn" data-scan="167" aria-label="Attack or Action">
+            <span class="btn-main">⚔️ ATTACK / ACTION</span>
+            <span class="btn-sub">[Space / Enter / 5]</span>
+          </button>
+        </div>
+
+        <!-- Center Stage: Screen, Upscaling & Emulation -->
+        <div class="center-deck">
+          <div class="screen-housing">
+            <div class="canvas-container">
+              <canvas id="canvas" class="scale-3x filter-sharp" width="176" height="208" tabindex="0" aria-label="Shadowkey display"></canvas>
+              <div class="crt-overlay" id="crt-overlay" hidden></div>
+            </div>
+            
+            <div class="screen-branding">NOKIA N-GAGE · 176×208 RETRO DISPLAY</div>
+
+            <div class="overlay" id="overlay">
+              <div class="overlay-inner">
+                <h2 id="overlay-title">The Elder Scrolls Travels: Shadowkey</h2>
+                <p id="overlay-text">Direct in-browser WebAssembly emulation with local save retention. First startup takes ~15 seconds to unpack.</p>
+                <progress id="progress" max="100" value="0" hidden></progress>
+                <button id="start" class="primary-btn">Start Game</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="toolbar">
-          <button id="pause" disabled>Pause</button>
-          <button id="sound" disabled aria-pressed="false">Mute</button>
-          <button id="fullscreen">Fullscreen</button>
-          <span id="status" class="status" role="status">Ready</span>
-        </div>
-        <div class="keypad" id="keypad" aria-label="Game controls">
-          <div>
-            <div class="softkeys">
-              <button data-scan="164" aria-label="Left soft key">Left menu</button>
-              <button data-scan="165" aria-label="Right soft key">Right menu</button>
+
+          <!-- Controls Toolbar: Scale, Filter, Audio, Fullscreen -->
+          <div class="toolbar">
+            <div class="tool-group">
+              <span class="tool-label">Scale</span>
+              <button data-scale="2x" title="Compact integer scale (352×416)">2x</button>
+              <button data-scale="3x" class="btn-active" title="Standard desktop scale (528×624)">3x</button>
+              <button data-scale="4x" title="Large scale (704×832)">4x</button>
+              <button data-scale="fit" title="Fit to browser window">Fit</button>
             </div>
-            <div class="dpad">
-              <span></span><button data-scan="16" aria-label="Up">↑</button><span></span>
-              <button data-scan="14" aria-label="Left">←</button>
-              <button data-scan="167" aria-label="Confirm">OK</button>
-              <button data-scan="15" aria-label="Right">→</button>
-              <span></span><button data-scan="17" aria-label="Down">↓</button>
+
+            <div class="tool-group">
+              <span class="tool-label">Filter</span>
+              <button data-filter="sharp" class="btn-active" title="Crisp pixel art">Sharp</button>
+              <button data-filter="crt" title="Authentic retro LCD / scanline grid">LCD</button>
+              <button data-filter="smooth" title="Bilinear interpolation">Smooth</button>
             </div>
-          </div>
-          <div class="numbers" aria-label="N-Gage keypad">
-            <button data-scan="49">1</button>
-            <button data-scan="50">2</button>
-            <button data-scan="51">3</button>
-            <button data-scan="52">4</button>
-            <button data-scan="53">5</button>
-            <button data-scan="54">6</button>
-            <button data-scan="55">7</button>
-            <button data-scan="56">8</button>
-            <button data-scan="57">9</button>
-            <button data-scan="133" aria-label="Star">*</button>
-            <button data-scan="48">0</button>
-            <button data-scan="127" aria-label="Hash">#</button>
+
+            <button id="pause" disabled title="Pause emulation">Pause</button>
+            <button id="sound" disabled aria-pressed="false" title="Mute/Unmute audio">Mute</button>
+            <button id="fullscreen" title="Enter fullscreen">Fullscreen</button>
+            
+            <span id="status" class="status-badge" role="status">Ready</span>
           </div>
         </div>
+
+        <!-- Right Deck: Numeric Actions & Right Menu -->
+        <div class="deck right-deck">
+          <div class="deck-title">ACTIONS & HOTKEYS</div>
+          <button class="softkey-btn" data-scan="165" aria-label="Right soft key (Inventory)">
+            <span class="btn-main">INVENTORY</span>
+            <span class="btn-sub">[E / F2 / Esc]</span>
+          </button>
+
+          <div class="numbers">
+            <button data-scan="49" class="num-btn">
+              <span class="num-key">1</span>
+              <span class="btn-sub">Map</span>
+            </button>
+            <button data-scan="50" class="num-btn">
+              <span class="num-key">2</span>
+              <span class="btn-sub">Look Up</span>
+            </button>
+            <button data-scan="51" class="num-btn">
+              <span class="num-key">3</span>
+              <span class="btn-sub">Stats</span>
+            </button>
+
+            <button data-scan="52" class="num-btn">
+              <span class="num-key">4</span>
+              <span class="btn-sub">Turn L</span>
+            </button>
+            <button data-scan="53" class="num-btn key-attack">
+              <span class="num-key">5</span>
+              <span class="btn-sub">Attack</span>
+            </button>
+            <button data-scan="54" class="num-btn">
+              <span class="num-key">6</span>
+              <span class="btn-sub">Turn R</span>
+            </button>
+
+            <button data-scan="55" class="num-btn key-magic">
+              <span class="num-key">7</span>
+              <span class="btn-sub">Spell</span>
+            </button>
+            <button data-scan="56" class="num-btn">
+              <span class="num-key">8</span>
+              <span class="btn-sub">Look Dn</span>
+            </button>
+            <button data-scan="57" class="num-btn">
+              <span class="num-key">9</span>
+              <span class="btn-sub">Rest</span>
+            </button>
+
+            <button data-scan="133" class="num-btn">
+              <span class="num-key">*</span>
+              <span class="btn-sub">[</span>
+            </button>
+            <button data-scan="48" class="num-btn">
+              <span class="num-key">0</span>
+              <span class="btn-sub">0</span>
+            </button>
+            <button data-scan="127" class="num-btn">
+              <span class="num-key">#</span>
+              <span class="btn-sub">]</span>
+            </button>
+          </div>
+
+          <button class="quick-action-btn magic-btn" data-scan="55" aria-label="Cast Selected Spell">
+            <span class="btn-main">✨ CAST SPELL</span>
+            <span class="btn-sub">[Key 7]</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Secondary Information & Save Tools -->
+    <div class="secondary-grid">
+      <section class="panel">
+        <h2>📖 Game Guide & Controls</h2>
+        <div class="guide-grid">
+          <div class="guide-item">
+            <strong>Movement & Exploration</strong>
+            <span>Use <code>WASD</code> or <code>Arrow Keys</code> to walk and strafe. Use <code>4</code> and <code>6</code> to turn smoothly.</span>
+          </div>
+          <div class="guide-item">
+            <strong>Combat & Magic</strong>
+            <span>Press <code>Space</code>, <code>Enter</code>, or <code>5</code> to swing your weapon. Press <code>7</code> to unleash your active spell.</span>
+          </div>
+          <div class="guide-item">
+            <strong>Menus & Journal</strong>
+            <span>Press <code>Q</code> (or F1) for the main system menu. Press <code>E</code> (or F2 / #) to view your inventory and equip items.</span>
+          </div>
+          <div class="guide-item">
+            <strong>Maps & Rest</strong>
+            <span>Press <code>1</code> to open the regional map and quest log. Press <code>9</code> to rest and regain health/magicka.</span>
+          </div>
+        </div>
+
+        <div class="save-section">
+          <h2>💾 Save Data Management</h2>
+          <p>Progress is saved into your browser's persistent storage (IndexedDB) whenever you choose <em>Save Game</em> in the in-game menu. Export a JSON backup to protect against browser cache clearing or to transfer your character to another computer.</p>
+          <div class="save-buttons">
+            <button id="export" disabled>Export Save Backup</button>
+            <label class="file-button">Import Save Backup<input id="import" type="file" accept="application/json,.json"></label>
+          </div>
+          <p id="message" class="messages" role="status"></p>
+        </div>
+
+        <details class="diagnostics" style="margin-top:16px;">
+          <summary>Emulator Diagnostics</summary>
+          <button id="diagnose">Capture Diagnostics</button>
+          <pre id="log" style="margin-top:8px;font-size:11px;color:#8a96ab;"></pre>
+        </details>
       </section>
-      <aside class="panel info-panel">
-        <img class="cover" src="cover.jpg" alt="The Elder Scrolls Travels: Shadowkey cover art" width="600" height="900">
-        <div class="game-info">
-          <p><strong>Platform</strong> · Nokia N-Gage</p>
-          <p><strong>Developer</strong> · Vir2L Studios / SilverBack</p>
-          <p><strong>Publisher</strong> · Bethesda Softworks</p>
-          <p><strong>Genre</strong> · 3D First-Person RPG</p>
+
+      <aside class="panel">
+        <h2>ℹ️ Title Information</h2>
+        <div class="info-card">
+          <img class="cover-img" src="cover.jpg" alt="Shadowkey Cover Art" width="100" height="145">
+          <div class="info-details">
+            <p><strong>Platform:</strong> Nokia N-Gage</p>
+            <p><strong>Developer:</strong> Vir2L / SilverBack</p>
+            <p><strong>Publisher:</strong> Bethesda Softworks</p>
+            <p><strong>Release:</strong> November 2004</p>
+            <p><strong>Genre:</strong> 3D First-Person RPG</p>
+          </div>
         </div>
       </aside>
     </div>
-    <section class="panel control-panel">
-      <h2>Controls & Saves</h2>
-      <div class="controls">
-        <p><strong>Arrow keys</strong> · Direction pad<br><strong>Enter</strong> · Confirm / OK<br><strong>F1 / F2</strong> (or Esc) · Left / Right menu</p>
-        <p><strong>0–9</strong> · N-Gage number keys (Actions & Hotkeys)<br><strong>[ / ]</strong> (or * / #) · Star / Hash<br><strong>Backspace</strong> · Clear / Back</p>
-      </div>
-      <p class="save-note">Use <em>Save Game</em> in the in-game menu to save your progress. Saves are retained locally in this browser (IndexedDB). Export a backup before clearing browser data or to transfer saves between devices.</p>
-      <div class="save-tools">
-        <button id="export" disabled>Export saves</button>
-        <label class="file-button">Import saves<input id="import" type="file" accept="application/json,.json"></label>
-      </div>
-      <p id="message" class="messages" role="status"></p>
-      <details class="diagnostics">
-        <summary>Diagnostics</summary>
-        <button id="diagnose">Capture diagnostics</button>
-        <pre id="log"></pre>
-      </details>
-    </section>
+
     <footer>
       <span>THE ELDER SCROLLS TRAVELS: SHADOWKEY</span>
-      <span class="credits">WebAssembly port powered by <a href="https://github.com/zixing131/EKA2L1-WEB" target="_blank" rel="noopener">EKA2L1-WEB</a> · Hosted on <a href="https://github.com/analogbits/shadowkey" target="_blank" rel="noopener">GitHub Pages</a></span>
+      <span>Emulation powered by <a href="https://github.com/zixing131/EKA2L1-WEB" target="_blank" rel="noopener">EKA2L1-WEB</a> · Hosted on <a href="https://github.com/analogbits/shadowkey" target="_blank" rel="noopener">GitHub Pages</a></span>
     </footer>
   </main>
 </body>
