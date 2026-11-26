@@ -319,19 +319,39 @@ function releaseKeys() {
   document.querySelectorAll('.pressed').forEach(b => b.classList.remove('pressed'));
 }
 
-// Natural PC Controls Mapping: WASD + Space + Number Keys
+// MacBook Pro & PC Keyboard Mapping
 const keyMap = {
-  // D-Pad / Movement
+  // Movement (WASD & Inverted-T Arrows)
   ArrowUp: 16, w: 16, W: 16,
   ArrowDown: 17, s: 17, S: 17,
   ArrowLeft: 14, a: 14, A: 14,
   ArrowRight: 15, d: 15, D: 15,
-  // Confirm / Action / Attack
-  Enter: 167, ' ': 167,
-  // Menus
-  F1: 164, q: 164, Q: 164,
-  F2: 165, e: 165, E: 165, Escape: 165,
-  // Extra
+
+  // Camera & Turning (IJKL)
+  i: 50, I: 50,          // Look Up (Key 2)
+  k: 56, K: 56,          // Look Down (Key 8)
+  j: 52, J: 52,          // Turn Left (Key 4)
+  l: 54, L: 54,          // Turn Right (Key 6)
+
+  // Actions & Combat
+  ' ': 167,              // Space = Attack / Interact
+  Enter: 167,            // Return = Confirm / Attack
+  f: 55, F: 55,          // F = Cast Spell (Key 7)
+
+  // Menus & Interface (Mac friendly: Esc, Tab, Q, E)
+  Escape: 164,           // esc = System Menu (Left Softkey)
+  q: 164, Q: 164,        // Q = System Menu
+  F1: 164,
+  Tab: 165,              // tab = Inventory / Back (Right Softkey)
+  e: 165, E: 165,        // E = Inventory
+  F2: 165,
+
+  // RPG Hotkeys
+  m: 49, M: 49,          // M = Map & Journal (Key 1)
+  c: 51, C: 51,          // C = Character Stats (Key 3)
+  r: 57, R: 57,          // R = Rest / Camp (Key 9)
+
+  // Standard N-Gage Keypad Numbers & Symbols
   Backspace: 1,
   '[': 133, '*': 133,
   ']': 127, '#': 127

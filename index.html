@@ -20,7 +20,7 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=3">
+  <link rel="stylesheet" href="player.css?v=4">
   <script src="player.js" defer></script>
 </head>
 <body>
@@ -102,30 +102,30 @@
           <!-- Middle Softkeys & Quick Attack -->
           <div class="center-actions">
             <div class="softkeys-row">
-              <button data-scan="164" title="Left softkey (System menu)">Menu (Q)</button>
-              <button data-scan="165" title="Right softkey (Inventory)">Inv (E)</button>
+              <button data-scan="164" title="Left softkey (System menu: esc or Q)">Menu (esc / Q)</button>
+              <button data-scan="165" title="Right softkey (Inventory: tab or E)">Inv (tab / E)</button>
             </div>
-            <button class="big-action-btn btn-attack" data-scan="167" title="Attack / Action (Space or Enter)">
-              ⚔️ Attack (Space)
+            <button class="big-action-btn btn-attack" data-scan="167" title="Attack / Action (space or return)">
+              ⚔️ Attack (space)
             </button>
-            <button class="big-action-btn btn-magic" data-scan="55" title="Cast spell (Key 7)">
-              ✨ Cast Spell (7)
+            <button class="big-action-btn btn-magic" data-scan="55" title="Cast active spell (F or 7)">
+              ✨ Cast Spell (F)
             </button>
           </div>
 
           <!-- Number Keypad -->
           <div class="numpad" aria-label="N-Gage numeric keypad">
-            <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Map</span></button>
-            <button data-scan="50"><span class="num-val">2</span><span class="num-tag">Up</span></button>
-            <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Stats</span></button>
+            <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Map (M)</span></button>
+            <button data-scan="50"><span class="num-val">2</span><span class="num-tag">Up (I)</span></button>
+            <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Stats (C)</span></button>
             
-            <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Turn L</span></button>
+            <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Turn L (J)</span></button>
             <button data-scan="53" class="active"><span class="num-val">5</span><span class="num-tag">Action</span></button>
-            <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Turn R</span></button>
+            <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Turn R (L)</span></button>
             
-            <button data-scan="55"><span class="num-val">7</span><span class="num-tag">Spell</span></button>
-            <button data-scan="56"><span class="num-val">8</span><span class="num-tag">Down</span></button>
-            <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Rest</span></button>
+            <button data-scan="55"><span class="num-val">7</span><span class="num-tag">Spell (F)</span></button>
+            <button data-scan="56"><span class="num-val">8</span><span class="num-tag">Down (K)</span></button>
+            <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Rest (R)</span></button>
             
             <button data-scan="133"><span class="num-val">*</span><span class="num-tag">[</span></button>
             <button data-scan="48"><span class="num-val">0</span><span class="num-tag">0</span></button>
@@ -136,12 +136,12 @@
 
       </section>
 
-      <!-- Right Column: Clean Keyboard Guide, Saves & Info -->
+      <!-- Right Column: Clean MacBook Keyboard Guide, Saves & Info -->
       <aside class="sidebar">
         
-        <!-- Keyboard Shortcuts Table -->
+        <!-- MacBook Keyboard Shortcuts Table -->
         <div class="card">
-          <h2>⌨️ Keyboard Controls</h2>
+          <h2> Mac Keyboard Controls</h2>
           <table class="key-table">
             <tbody>
               <tr>
@@ -149,40 +149,40 @@
                 <td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></td>
               </tr>
               <tr>
-                <td>Attack / Select</td>
-                <td><kbd>Space</kbd> or <kbd>Enter</kbd> (Key 5)</td>
+                <td>Attack / Interact</td>
+                <td><kbd>space</kbd> or <kbd>return ⏎</kbd></td>
               </tr>
               <tr>
                 <td>Cast Spell</td>
-                <td><kbd>7</kbd></td>
+                <td><kbd>F</kbd> <span style="font-size:10px;color:#8c97ad;">(or 7)</span></td>
               </tr>
               <tr>
                 <td>Turn Left / Right</td>
-                <td><kbd>4</kbd> / <kbd>6</kbd></td>
+                <td><kbd>J</kbd> / <kbd>L</kbd> <span style="font-size:10px;color:#8c97ad;">(or 4 / 6)</span></td>
               </tr>
               <tr>
                 <td>Look Up / Down</td>
-                <td><kbd>2</kbd> / <kbd>8</kbd></td>
+                <td><kbd>I</kbd> / <kbd>K</kbd> <span style="font-size:10px;color:#8c97ad;">(or 2 / 8)</span></td>
               </tr>
               <tr>
                 <td>System Menu</td>
-                <td><kbd>Q</kbd> or <kbd>F1</kbd></td>
+                <td><kbd>esc</kbd> or <kbd>Q</kbd></td>
               </tr>
               <tr>
                 <td>Inventory</td>
-                <td><kbd>E</kbd> or <kbd>F2</kbd> or <kbd>#</kbd></td>
+                <td><kbd>tab ⇥</kbd> or <kbd>E</kbd></td>
               </tr>
               <tr>
                 <td>Map & Journal</td>
-                <td><kbd>1</kbd></td>
+                <td><kbd>M</kbd> <span style="font-size:10px;color:#8c97ad;">(or 1)</span></td>
               </tr>
               <tr>
                 <td>Character Stats</td>
-                <td><kbd>3</kbd></td>
+                <td><kbd>C</kbd> <span style="font-size:10px;color:#8c97ad;">(or 3)</span></td>
               </tr>
               <tr>
                 <td>Rest / Camp</td>
-                <td><kbd>9</kbd></td>
+                <td><kbd>R</kbd> <span style="font-size:10px;color:#8c97ad;">(or 9)</span></td>
               </tr>
             </tbody>
           </table>
@@ -191,7 +191,7 @@
         <!-- Save Management -->
         <div class="card save-tools-block">
           <h2>💾 Save Data</h2>
-          <p>Progress is saved to this browser's IndexedDB when you choose <em>Save Game</em> in the menu. Export a backup before clearing cache.</p>
+          <p>Progress is saved to your browser's IndexedDB when you choose <em>Save Game</em> in the in-game menu. Export a backup before clearing Safari/Chrome data.</p>
           <div class="save-btns">
             <button id="export" disabled>Export Backup</button>
             <label class="file-btn">
