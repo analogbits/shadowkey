@@ -380,22 +380,24 @@ function releaseKeys() {
 
 // MacBook Pro & PC Keyboard Mapping
 const keyMap = {
-  // Movement (WASD & Inverted-T Arrows)
-  ArrowUp: 16, w: 16, W: 16,
-  ArrowDown: 17, s: 17, S: 17,
-  ArrowLeft: 14, a: 14, A: 14,
-  ArrowRight: 15, d: 15, D: 15,
+  // Movement (WASD = Forward/Backward + Strafe Left/Right)
+  ArrowUp: 16, w: 16, W: 16,          // Walk Forward
+  ArrowDown: 17, s: 17, S: 17,        // Walk Backward
+  a: 52, A: 52,                       // A = Strafe Left (Key 4)
+  d: 54, D: 54,                       // D = Strafe Right (Key 6)
+  ArrowLeft: 14,                      // Left Arrow = Turn Left
+  ArrowRight: 15,                     // Right Arrow = Turn Right
 
   // Camera & Turning (IJKL)
-  i: 50, I: 50,          // Look Up (Key 2)
-  k: 56, K: 56,          // Look Down (Key 8)
-  j: 52, J: 52,          // Turn Left (Key 4)
-  l: 54, L: 54,          // Turn Right (Key 6)
+  i: 50, I: 50,                       // Look Up (Key 2)
+  k: 56, K: 56,                       // Look Down (Key 8)
+  j: 14, J: 14,                       // Turn Left (D-Pad Left)
+  l: 15, L: 15,                       // Turn Right (D-Pad Right)
 
   // Actions & Combat
-  ' ': 167,              // Space = Attack / Interact
-  Enter: 167,            // Return = Confirm / Attack
-  f: 55, F: 55,          // F = Cast Spell (Key 7)
+  ' ': 167,                           // Space = Attack / Interact
+  Enter: 167,                         // Return = Confirm / Attack
+  f: 55, F: 55,                       // F = Cast Spell (Key 7)
 
   // Menus & Interface (Mac friendly: Esc, Tab, Q, E)
   Escape: 164,           // esc = System Menu (Left Softkey)
@@ -496,7 +498,7 @@ function updateMouseLockState() {
     keyUp('mouse:lookDown', true);
     keyUp('mouse:attack', true);
     keyUp('mouse:spell', true);
-    document.querySelectorAll('[data-scan="50"], [data-scan="52"], [data-scan="54"], [data-scan="56"], [data-scan="167"], [data-scan="55"]').forEach(b => b.classList.remove('pressed'));
+    document.querySelectorAll('[data-scan="50"], [data-scan="14"], [data-scan="15"], [data-scan="56"], [data-scan="167"], [data-scan="55"]').forEach(b => b.classList.remove('pressed'));
     mouseAccumX = 0;
     mouseAccumY = 0;
     if (mouseAnimFrame) {
@@ -521,25 +523,25 @@ function processMouseLook() {
     return;
   }
 
-  // Turn Left (Key 4 / scan 52) / Turn Right (Key 6 / scan 54)
+  // Turn Left (Scan 14) / Turn Right (Scan 15)
   if (mouseAccumX > THRESHOLD) {
-    keyDown(54, 'mouse:turnRight');
+    keyDown(15, 'mouse:turnRight');
     keyUp('mouse:turnLeft', true);
-    document.querySelectorAll('[data-scan="54"]').forEach(b => b.classList.add('pressed'));
-    document.querySelectorAll('[data-scan="52"]').forEach(b => b.classList.remove('pressed'));
+    document.querySelectorAll('[data-scan="15"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="14"]').forEach(b => b.classList.remove('pressed'));
     mouseAccumX -= Math.max(0.7, mouseAccumX * 0.32);
     if (mouseAccumX < 0) mouseAccumX = 0;
   } else if (mouseAccumX < -THRESHOLD) {
-    keyDown(52, 'mouse:turnLeft');
+    keyDown(14, 'mouse:turnLeft');
     keyUp('mouse:turnRight', true);
-    document.querySelectorAll('[data-scan="52"]').forEach(b => b.classList.add('pressed'));
-    document.querySelectorAll('[data-scan="54"]').forEach(b => b.classList.remove('pressed'));
+    document.querySelectorAll('[data-scan="14"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="15"]').forEach(b => b.classList.remove('pressed'));
     mouseAccumX += Math.max(0.7, -mouseAccumX * 0.32);
     if (mouseAccumX > 0) mouseAccumX = 0;
   } else {
     keyUp('mouse:turnRight');
     keyUp('mouse:turnLeft');
-    document.querySelectorAll('[data-scan="52"], [data-scan="54"]').forEach(b => b.classList.remove('pressed'));
+    document.querySelectorAll('[data-scan="14"], [data-scan="15"]').forEach(b => b.classList.remove('pressed'));
     mouseAccumX = 0;
   }
 
