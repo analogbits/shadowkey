@@ -26,8 +26,8 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=11">
-  <script src="player.js?v=11" defer></script>
+  <link rel="stylesheet" href="player.css?v=12">
+  <script src="player.js?v=12" defer></script>
 </head>
 <body>
   <header>
@@ -91,6 +91,13 @@
             <button data-filter="sharp" class="active" title="Pixel-sharp rendering">Sharp</button>
             <button data-filter="crt" title="Authentic LCD / scanline matrix">LCD Grid</button>
             <button data-filter="smooth" title="Bilinear smoothing">Smooth</button>
+          </div>
+
+          <div class="tool-group">
+            <span class="tool-label">Look Speed</span>
+            <button data-speed="1x" title="Standard look sensitivity">1x</button>
+            <button data-speed="2x" class="active" title="Fast look speed (Recommended)">2x</button>
+            <button data-speed="3x" title="Hyper-fast look sensitivity">3x</button>
           </div>
 
           <button id="mouselook" disabled title="FPS 3D Mouse Look (click screen, Esc to free)">🖱️ Mouse Look</button>

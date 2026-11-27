@@ -130,11 +130,21 @@ if ($('import')) {
 }
 
 // Display Scaling & Shader Filters
+const LOOK_SPEED_PRESETS = {
+  '1x': { sens: 1.8, maxCap: 500, drainBase: 160, drainFactor: 2.5 },
+  '2x': { sens: 3.2, maxCap: 850, drainBase: 220, drainFactor: 2.8 },
+  '3x': { sens: 5.2, maxCap: 1300, drainBase: 280, drainFactor: 3.2 }
+};
+
+let currentLookSpeed = localStorage.getItem('shadowkey-lookspeed') || '2x';
+
 function initDisplayOptions() {
   const savedScale = localStorage.getItem('shadowkey-scale') || '3x';
   const savedFilter = localStorage.getItem('shadowkey-filter') || 'sharp';
+  const savedSpeed = localStorage.getItem('shadowkey-lookspeed') || '2x';
   setScale(savedScale);
   setFilter(savedFilter);
+  setLookSpeed(savedSpeed);
 
   document.querySelectorAll('[data-scale]').forEach(btn => {
     btn.onclick = () => setScale(btn.dataset.scale);
@@ -142,6 +152,18 @@ function initDisplayOptions() {
   document.querySelectorAll('[data-filter]').forEach(btn => {
     btn.onclick = () => setFilter(btn.dataset.filter);
   });
+  document.querySelectorAll('[data-speed]').forEach(btn => {
+    btn.onclick = () => setLookSpeed(btn.dataset.speed);
+  });
+}
+
+function setLookSpeed(speed) {
+  if (!LOOK_SPEED_PRESETS[speed]) speed = '2x';
+  currentLookSpeed = speed;
+  document.querySelectorAll('[data-speed]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.speed === speed);
+  });
+  localStorage.setItem('shadowkey-lookspeed', speed);
 }
 
 function setScale(scale) {
@@ -451,8 +473,8 @@ for (const name of ['keydown', 'keyup']) {
 let mouseAccumX = 0;
 let mouseAccumY = 0;
 let mouseAnimFrame = null;
-const MOUSE_SENSITIVITY = 0.8;
-const THRESHOLD = 1.0;
+let lastMouseLookTime = performance.now();
+const THRESHOLD = 0.5;
 
 function isMouseLocked() {
   const elem = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement;
@@ -508,6 +530,7 @@ function updateMouseLockState() {
     }
   } else {
     unlockAudio();
+    lastMouseLookTime = performance.now();
     if (!mouseAnimFrame) {
       mouseAnimFrame = requestAnimationFrame(processMouseLook);
     }
@@ -524,20 +547,29 @@ function processMouseLook() {
     return;
   }
 
+  const now = performance.now();
+  // Frame-rate independent delta time (seconds), clamped to avoid large jumps after backgrounding
+  const dt = Math.min(0.05, Math.max(0.001, (now - lastMouseLookTime) / 1000));
+  lastMouseLookTime = now;
+
+  const cfg = LOOK_SPEED_PRESETS[currentLookSpeed] || LOOK_SPEED_PRESETS['2x'];
+
   // Turn Left (Scan 14) / Turn Right (Scan 15)
   if (mouseAccumX > THRESHOLD) {
     keyDown(15, 'mouse:turnRight');
     keyUp('mouse:turnLeft', true);
     document.querySelectorAll('[data-scan="15"]').forEach(b => b.classList.add('pressed'));
     document.querySelectorAll('[data-scan="14"]').forEach(b => b.classList.remove('pressed'));
-    mouseAccumX -= Math.max(0.7, mouseAccumX * 0.32);
+    const drain = (cfg.drainBase + mouseAccumX * cfg.drainFactor) * dt;
+    mouseAccumX -= drain;
     if (mouseAccumX < 0) mouseAccumX = 0;
   } else if (mouseAccumX < -THRESHOLD) {
     keyDown(14, 'mouse:turnLeft');
     keyUp('mouse:turnRight', true);
     document.querySelectorAll('[data-scan="14"]').forEach(b => b.classList.add('pressed'));
     document.querySelectorAll('[data-scan="15"]').forEach(b => b.classList.remove('pressed'));
-    mouseAccumX += Math.max(0.7, -mouseAccumX * 0.32);
+    const drain = (cfg.drainBase + (-mouseAccumX) * cfg.drainFactor) * dt;
+    mouseAccumX += drain;
     if (mouseAccumX > 0) mouseAccumX = 0;
   } else {
     keyUp('mouse:turnRight');
@@ -552,14 +584,16 @@ function processMouseLook() {
     keyUp('mouse:lookDown', true);
     document.querySelectorAll('[data-scan="50"]').forEach(b => b.classList.add('pressed'));
     document.querySelectorAll('[data-scan="56"]').forEach(b => b.classList.remove('pressed'));
-    mouseAccumY += Math.max(0.7, -mouseAccumY * 0.32);
+    const drain = (cfg.drainBase + (-mouseAccumY) * cfg.drainFactor) * dt;
+    mouseAccumY += drain;
     if (mouseAccumY > 0) mouseAccumY = 0;
   } else if (mouseAccumY > THRESHOLD) {
     keyDown(56, 'mouse:lookDown');
     keyUp('mouse:lookUp', true);
     document.querySelectorAll('[data-scan="56"]').forEach(b => b.classList.add('pressed'));
     document.querySelectorAll('[data-scan="50"]').forEach(b => b.classList.remove('pressed'));
-    mouseAccumY -= Math.max(0.7, mouseAccumY * 0.32);
+    const drain = (cfg.drainBase + mouseAccumY * cfg.drainFactor) * dt;
+    mouseAccumY -= drain;
     if (mouseAccumY < 0) mouseAccumY = 0;
   } else {
     keyUp('mouse:lookUp');
@@ -577,14 +611,16 @@ window.addEventListener('mousemove', e => {
   const dx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
   const dy = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
-  const clampedX = Math.max(-50, Math.min(50, dx));
-  const clampedY = Math.max(-50, Math.min(50, dy));
+  const cfg = LOOK_SPEED_PRESETS[currentLookSpeed] || LOOK_SPEED_PRESETS['2x'];
 
-  mouseAccumX += clampedX * MOUSE_SENSITIVITY;
-  mouseAccumY += clampedY * MOUSE_SENSITIVITY;
+  const clampedX = Math.max(-250, Math.min(250, dx));
+  const clampedY = Math.max(-200, Math.min(200, dy));
 
-  mouseAccumX = Math.max(-70, Math.min(70, mouseAccumX));
-  mouseAccumY = Math.max(-70, Math.min(70, mouseAccumY));
+  mouseAccumX += clampedX * cfg.sens;
+  mouseAccumY += clampedY * cfg.sens;
+
+  mouseAccumX = Math.max(-cfg.maxCap, Math.min(cfg.maxCap, mouseAccumX));
+  mouseAccumY = Math.max(-cfg.maxCap * 0.75, Math.min(cfg.maxCap * 0.75, mouseAccumY));
 }, { passive: true });
 
 window.addEventListener('mousedown', e => {
