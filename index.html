@@ -26,8 +26,8 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=10">
-  <script src="player.js?v=10" defer></script>
+  <link rel="stylesheet" href="player.css?v=11">
+  <script src="player.js?v=11" defer></script>
 </head>
 <body>
   <header>
@@ -103,11 +103,11 @@
 
         <!-- Quick Utility Bar for mobile and desktop -->
         <div class="quick-bar" aria-label="Game Quick Bar">
-          <button data-scan="164" class="quick-btn" title="System Menu (esc / Q)">📜 Menu</button>
-          <button data-scan="165" class="quick-btn" title="Inventory (tab / E)">🎒 Inv</button>
-          <button data-scan="49" class="quick-btn" title="Map & Journal (M / 1)">🗺️ Map</button>
-          <button data-scan="51" class="quick-btn" title="Character Stats (C / 3)">📊 Stats</button>
-          <button data-scan="57" class="quick-btn" title="Rest / Camp (R / 9)">🏕️ Rest</button>
+          <button data-scan="164" class="quick-btn" title="System Menu (Esc / Q / F1)">📜 Menu</button>
+          <button data-scan="127" class="quick-btn" title="Inventory & Character Stats (Tab / C / #)">🎒 Inv</button>
+          <button data-scan="57" class="quick-btn" title="Map & Journal (M / 9)">🗺️ Map</button>
+          <button data-scan="48" class="quick-btn" title="Cycle Weapons & Spells (R / 0)">⚔️ Swap</button>
+          <button data-scan="133" class="quick-btn" title="Cycle Quick Consumables (T / *)">🧪 Potion</button>
         </div>
 
         <!-- Handheld Keypad Deck -->
@@ -119,9 +119,9 @@
               <span></span>
               <button data-scan="16" aria-label="Walk Forward / Up">▲</button>
               <span></span>
-              <button data-scan="14" aria-label="Strafe Left">◀</button>
+              <button data-scan="14" aria-label="Turn Left">◀</button>
               <button data-scan="167" class="dpad-ok" aria-label="Confirm / OK">OK</button>
-              <button data-scan="15" aria-label="Strafe Right">▶</button>
+              <button data-scan="15" aria-label="Turn Right">▶</button>
               <span></span>
               <button data-scan="17" aria-label="Walk Backward / Down">▼</button>
               <span></span>
@@ -133,16 +133,19 @@
             <div class="action-grid">
               <!-- Camera Turn Row -->
               <div class="action-row">
-                <button data-scan="52" class="cam-btn" title="Turn Left (J / 4)">↺ Turn L</button>
-                <button data-scan="54" class="cam-btn" title="Turn Right (L / 6)">↻ Turn R</button>
+                <button data-scan="14" class="cam-btn" title="Turn Left (← / J / Mouse)">↺ Turn L</button>
+                <button data-scan="15" class="cam-btn" title="Turn Right (→ / L / Mouse)">↻ Turn R</button>
               </div>
 
-              <!-- Main Combat Action Row -->
+              <!-- Main Combat & Interaction Action Row -->
               <div class="action-row primary-actions">
-                <button data-scan="167" class="big-action-btn btn-attack" title="Attack / Interact (Space / Enter / 5)">
-                  ⚔️ Attack
+                <button data-scan="53" class="big-action-btn btn-attack" title="Attack / Swing Weapon (Space / Left Click / 5)">
+                  ⚔️ Atk
                 </button>
-                <button data-scan="55" class="big-action-btn btn-magic" title="Cast Spell (F / 7)">
+                <button data-scan="51" class="big-action-btn btn-interact" title="Interact / Talk / Loot / Open (E / Enter / 3)">
+                  ✋ Use
+                </button>
+                <button data-scan="55" class="big-action-btn btn-magic" title="Cast Spell (Right Click / F / 7)">
                   ✨ Spell
                 </button>
               </div>
@@ -159,21 +162,21 @@
           <details class="numpad-drawer" id="numpad-drawer">
             <summary class="drawer-summary">🔢 Vintage N-Gage Keypad</summary>
             <div class="numpad" aria-label="N-Gage numeric keypad">
-              <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Map</span></button>
+              <button data-scan="49"><span class="num-val">1</span><span class="num-tag">Jump</span></button>
               <button data-scan="50"><span class="num-val">2</span><span class="num-tag">Up</span></button>
-              <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Stats</span></button>
+              <button data-scan="51"><span class="num-val">3</span><span class="num-tag">Use</span></button>
               
-              <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Turn L</span></button>
-              <button data-scan="53" class="active"><span class="num-val">5</span><span class="num-tag">Action</span></button>
-              <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Turn R</span></button>
+              <button data-scan="52"><span class="num-val">4</span><span class="num-tag">Strafe L</span></button>
+              <button data-scan="53" class="active"><span class="num-val">5</span><span class="num-tag">Attack</span></button>
+              <button data-scan="54"><span class="num-val">6</span><span class="num-tag">Strafe R</span></button>
               
               <button data-scan="55"><span class="num-val">7</span><span class="num-tag">Spell</span></button>
               <button data-scan="56"><span class="num-val">8</span><span class="num-tag">Down</span></button>
-              <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Rest</span></button>
+              <button data-scan="57"><span class="num-val">9</span><span class="num-tag">Map</span></button>
               
-              <button data-scan="133"><span class="num-val">*</span><span class="num-tag">[</span></button>
-              <button data-scan="48"><span class="num-val">0</span><span class="num-tag">0</span></button>
-              <button data-scan="127"><span class="num-val">#</span><span class="num-tag">]</span></button>
+              <button data-scan="133"><span class="num-val">*</span><span class="num-tag">🧪</span></button>
+              <button data-scan="48"><span class="num-val">0</span><span class="num-tag">⚔️</span></button>
+              <button data-scan="127"><span class="num-val">#</span><span class="num-tag">Inv</span></button>
             </div>
           </details>
 
@@ -194,48 +197,56 @@
                 <td><kbd>Mouse Move</kbd> <span style="font-size:10px;color:var(--gold);">(Look 360° · Esc to free)</span></td>
               </tr>
               <tr>
+                <td>Attack / Swing Weapon</td>
+                <td><kbd>Left Click</kbd> or <kbd>space</kbd> <span style="font-size:10px;color:var(--gold);">(Key 5)</span></td>
+              </tr>
+              <tr>
+                <td>Interact / Talk / Loot</td>
+                <td><kbd>E</kbd> or <kbd>return ↵</kbd> <span style="font-size:10px;color:#68d391;">(Key 3)</span></td>
+              </tr>
+              <tr>
+                <td>Cast Spell / Quick Potion</td>
+                <td><kbd>Right Click</kbd> or <kbd>F</kbd> <span style="font-size:10px;color:#caaeff;">(Key 7)</span></td>
+              </tr>
+              <tr>
                 <td>Walk Forward / Back</td>
                 <td><kbd>W</kbd> <kbd>S</kbd> or <kbd>↑</kbd> <kbd>↓</kbd></td>
               </tr>
               <tr>
                 <td>Strafe Left / Right</td>
-                <td><kbd>A</kbd> <kbd>D</kbd> <span style="font-size:10px;color:#8c97ad;">(Side Step)</span></td>
-              </tr>
-              <tr>
-                <td>Attack / Interact</td>
-                <td><kbd>Left Click</kbd> or <kbd>space</kbd></td>
-              </tr>
-              <tr>
-                <td>Cast Spell</td>
-                <td><kbd>Right Click</kbd> or <kbd>F</kbd></td>
+                <td><kbd>A</kbd> <kbd>D</kbd> <span style="font-size:10px;color:#8c97ad;">(Side Step · 4 / 6)</span></td>
               </tr>
               <tr>
                 <td>Turn Left / Right</td>
-                <td><kbd>←</kbd> <kbd>→</kbd> or <kbd>J</kbd> / <kbd>L</kbd></td>
+                <td><kbd>←</kbd> <kbd>→</kbd> or <kbd>J</kbd> / <kbd>L</kbd> <span style="font-size:10px;color:#8c97ad;">(or Mouse)</span></td>
               </tr>
               <tr>
                 <td>Look Up / Down</td>
-                <td><kbd>I</kbd> / <kbd>K</kbd></td>
+                <td><kbd>I</kbd> / <kbd>K</kbd> <span style="font-size:10px;color:#8c97ad;">(or Mouse · 2 / 8)</span></td>
               </tr>
               <tr>
                 <td>Free Mouse / Menu</td>
-                <td><kbd>esc</kbd> <span style="font-size:10px;color:#8c97ad;">(or Q)</span></td>
+                <td><kbd>esc</kbd> <span style="font-size:10px;color:#8c97ad;">(or Q · Left Softkey)</span></td>
               </tr>
               <tr>
-                <td>Inventory</td>
-                <td><kbd>tab ⇥</kbd> or <kbd>E</kbd></td>
+                <td>Character / Inventory</td>
+                <td><kbd>tab ⇥</kbd> or <kbd>C</kbd> <span style="font-size:10px;color:#8c97ad;">(Key #)</span></td>
               </tr>
               <tr>
                 <td>Map & Journal</td>
-                <td><kbd>M</kbd> <span style="font-size:10px;color:#8c97ad;">(or 1)</span></td>
+                <td><kbd>M</kbd> <span style="font-size:10px;color:#8c97ad;">(Key 9)</span></td>
               </tr>
               <tr>
-                <td>Character Stats</td>
-                <td><kbd>C</kbd> <span style="font-size:10px;color:#8c97ad;">(or 3)</span></td>
+                <td>Swap Weapon / Spell</td>
+                <td><kbd>R</kbd> <span style="font-size:10px;color:#8c97ad;">(Key 0)</span></td>
               </tr>
               <tr>
-                <td>Rest / Camp</td>
-                <td><kbd>R</kbd> <span style="font-size:10px;color:#8c97ad;">(or 9)</span></td>
+                <td>Cycle Consumable</td>
+                <td><kbd>T</kbd> <span style="font-size:10px;color:#8c97ad;">(Key *)</span></td>
+              </tr>
+              <tr>
+                <td>Jump</td>
+                <td><kbd>Z</kbd> <span style="font-size:10px;color:#8c97ad;">(Key 1)</span></td>
               </tr>
             </tbody>
           </table>

@@ -521,20 +521,27 @@ button:disabled {
 }
 
 .primary-actions .big-action-btn {
-  padding: 12px 6px;
-  font-size: 12px;
+  padding: 11px 4px;
+  font-size: 11px;
   font-weight: 700;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
+  white-space: nowrap;
 }
 
 .btn-attack {
   border-color: rgba(200, 168, 106, 0.5);
   background: #252016;
   color: var(--gold);
+}
+
+.btn-interact {
+  border-color: rgba(72, 187, 120, 0.45);
+  background: #12241a;
+  color: #68d391;
 }
 
 .btn-magic {
@@ -845,8 +852,9 @@ body.mobile-fullscreen canvas {
     font-size: 10px;
   }
   .primary-actions .big-action-btn {
-    padding: 10px 4px;
-    font-size: 11px;
+    padding: 8px 2px;
+    font-size: 10px;
+    gap: 2px;
   }
   .numpad {
     grid-template-columns: repeat(3, 42px);

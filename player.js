@@ -381,12 +381,12 @@ function releaseKeys() {
 // MacBook Pro & PC Keyboard Mapping
 const keyMap = {
   // Movement (WASD = Forward/Backward + Strafe Left/Right)
-  ArrowUp: 16, w: 16, W: 16,          // Walk Forward
-  ArrowDown: 17, s: 17, S: 17,        // Walk Backward
+  ArrowUp: 16, w: 16, W: 16,          // Walk Forward (D-Pad Up)
+  ArrowDown: 17, s: 17, S: 17,        // Walk Backward (D-Pad Down)
   a: 52, A: 52,                       // A = Strafe Left (Key 4)
   d: 54, D: 54,                       // D = Strafe Right (Key 6)
-  ArrowLeft: 14,                      // Left Arrow = Turn Left
-  ArrowRight: 15,                     // Right Arrow = Turn Right
+  ArrowLeft: 14,                      // Left Arrow = Turn Left (D-Pad Left)
+  ArrowRight: 15,                     // Right Arrow = Turn Right (D-Pad Right)
 
   // Camera & Turning (IJKL)
   i: 50, I: 50,                       // Look Up (Key 2)
@@ -395,25 +395,25 @@ const keyMap = {
   l: 15, L: 15,                       // Turn Right (D-Pad Right)
 
   // Actions & Combat
-  ' ': 167,                           // Space = Attack / Interact
-  Enter: 167,                         // Return = Confirm / Attack
-  f: 55, F: 55,                       // F = Cast Spell (Key 7)
+  ' ': 53,                            // Space = Primary Attack / Swing Weapon (Key 5)
+  e: 51, E: 51,                       // E = Interact / Talk / Open / Loot (Key 3)
+  Enter: 51,                          // Return = Interact / Select Menu (Key 3)
+  f: 55, F: 55,                       // F = Cast Spell / Left Action (Key 7)
+  z: 49, Z: 49,                       // Z = Jump (Key 1)
+  r: 48, R: 48,                       // R = Cycle Weapons & Spells (Key 0)
+  t: 133, T: 133,                     // T = Cycle Quick Consumable / Potion (Key *)
 
-  // Menus & Interface (Mac friendly: Esc, Tab, Q, E)
+  // Menus & Interface (Mac friendly: Esc, Tab, Q, C, M)
   Escape: 164,           // esc = System Menu (Left Softkey)
   q: 164, Q: 164,        // Q = System Menu
   F1: 164,
-  Tab: 165,              // tab = Inventory / Back (Right Softkey)
-  e: 165, E: 165,        // E = Inventory
+  Tab: 127,              // Tab = Character Manager / Inv & Stats (Key #)
+  c: 127, C: 127,        // C = Character Stats & Inventory (Key #)
+  m: 57, M: 57,          // M = Map & Journal (Key 9)
+  Backspace: 165,        // Backspace = Cancel / Back (Right Softkey)
   F2: 165,
 
-  // RPG Hotkeys
-  m: 49, M: 49,          // M = Map & Journal (Key 1)
-  c: 51, C: 51,          // C = Character Stats (Key 3)
-  r: 57, R: 57,          // R = Rest / Camp (Key 9)
-
   // Standard N-Gage Keypad Numbers & Symbols
-  Backspace: 1,
   '[': 133, '*': 133,
   ']': 127, '#': 127
 };
@@ -498,7 +498,8 @@ function updateMouseLockState() {
     keyUp('mouse:lookDown', true);
     keyUp('mouse:attack', true);
     keyUp('mouse:spell', true);
-    document.querySelectorAll('[data-scan="50"], [data-scan="14"], [data-scan="15"], [data-scan="56"], [data-scan="167"], [data-scan="55"]').forEach(b => b.classList.remove('pressed'));
+    keyUp('mouse:interact', true);
+    document.querySelectorAll('[data-scan="50"], [data-scan="14"], [data-scan="15"], [data-scan="56"], [data-scan="53"], [data-scan="51"], [data-scan="55"]').forEach(b => b.classList.remove('pressed'));
     mouseAccumX = 0;
     mouseAccumY = 0;
     if (mouseAnimFrame) {
@@ -591,12 +592,16 @@ window.addEventListener('mousedown', e => {
   unlockAudio();
   if (e.button === 0) {
     e.preventDefault();
-    keyDown(167, 'mouse:attack');
-    document.querySelectorAll('[data-scan="167"]').forEach(b => b.classList.add('pressed'));
+    keyDown(53, 'mouse:attack');
+    document.querySelectorAll('[data-scan="53"]').forEach(b => b.classList.add('pressed'));
   } else if (e.button === 2) {
     e.preventDefault();
     keyDown(55, 'mouse:spell');
     document.querySelectorAll('[data-scan="55"]').forEach(b => b.classList.add('pressed'));
+  } else if (e.button === 1) {
+    e.preventDefault();
+    keyDown(51, 'mouse:interact');
+    document.querySelectorAll('[data-scan="51"]').forEach(b => b.classList.add('pressed'));
   }
 });
 
@@ -604,10 +609,13 @@ window.addEventListener('mouseup', e => {
   if (!isMouseLocked()) return;
   if (e.button === 0) {
     keyUp('mouse:attack');
-    document.querySelectorAll('[data-scan="167"]').forEach(b => b.classList.remove('pressed'));
+    document.querySelectorAll('[data-scan="53"]').forEach(b => b.classList.remove('pressed'));
   } else if (e.button === 2) {
     keyUp('mouse:spell');
     document.querySelectorAll('[data-scan="55"]').forEach(b => b.classList.remove('pressed'));
+  } else if (e.button === 1) {
+    keyUp('mouse:interact');
+    document.querySelectorAll('[data-scan="51"]').forEach(b => b.classList.remove('pressed'));
   }
 });
 
