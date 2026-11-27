@@ -26,8 +26,8 @@
     }
   </script>
   <script src="coi-serviceworker.js"></script>
-  <link rel="stylesheet" href="player.css?v=8">
-  <script src="player.js?v=8" defer></script>
+  <link rel="stylesheet" href="player.css?v=9">
+  <script src="player.js?v=9" defer></script>
 </head>
 <body>
   <header>
@@ -54,6 +54,11 @@
           <div class="canvas-wrapper">
             <canvas id="canvas" class="scale-3x filter-sharp" width="176" height="208" tabindex="0" aria-label="Shadowkey Display"></canvas>
             <div class="crt-scanlines" id="crt-overlay" hidden></div>
+            <div class="mouse-crosshair" id="mouse-crosshair" hidden></div>
+            <div class="mouselook-badge" id="mouselook-badge" hidden>
+              <span>🖱️ Mouse Look Active</span>
+              <small>Press <kbd>Esc</kbd> to free mouse</small>
+            </div>
             <div class="pause-overlay" id="pause-overlay" hidden>
               <div class="pause-badge">
                 <span>⏸️ GAME PAUSED</span>
@@ -88,6 +93,7 @@
             <button data-filter="smooth" title="Bilinear smoothing">Smooth</button>
           </div>
 
+          <button id="mouselook" disabled title="FPS 3D Mouse Look (click screen, Esc to free)">🖱️ Mouse Look</button>
           <button id="pause" disabled title="Pause or resume">Pause</button>
           <button id="sound" disabled aria-pressed="false" title="Mute or unmute">Mute</button>
           <button id="fullscreen" title="Fullscreen mode">Fullscreen</button>
@@ -180,7 +186,7 @@
         
         <!-- MacBook Keyboard Shortcuts Table -->
         <div class="card">
-          <h2> Mac Keyboard Controls</h2>
+          <h2> Mac & PC Controls</h2>
           <table class="key-table">
             <tbody>
               <tr>
@@ -188,12 +194,16 @@
                 <td><kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></td>
               </tr>
               <tr>
+                <td>3D Mouse Look</td>
+                <td><kbd>Mouse Move</kbd> <span style="font-size:10px;color:var(--gold);">(Click screen / Esc to free)</span></td>
+              </tr>
+              <tr>
                 <td>Attack / Interact</td>
-                <td><kbd>space</kbd> or <kbd>return ⏎</kbd></td>
+                <td><kbd>Left Click</kbd> or <kbd>space</kbd></td>
               </tr>
               <tr>
                 <td>Cast Spell</td>
-                <td><kbd>F</kbd> <span style="font-size:10px;color:#8c97ad;">(or 7)</span></td>
+                <td><kbd>Right Click</kbd> or <kbd>F</kbd></td>
               </tr>
               <tr>
                 <td>Turn Left / Right</td>
@@ -204,8 +214,8 @@
                 <td><kbd>I</kbd> / <kbd>K</kbd> <span style="font-size:10px;color:#8c97ad;">(or 2 / 8)</span></td>
               </tr>
               <tr>
-                <td>System Menu</td>
-                <td><kbd>esc</kbd> or <kbd>Q</kbd></td>
+                <td>Free Mouse / Menu</td>
+                <td><kbd>esc</kbd> <span style="font-size:10px;color:#8c97ad;">(or Q)</span></td>
               </tr>
               <tr>
                 <td>Inventory</td>

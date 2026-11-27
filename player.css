@@ -176,6 +176,72 @@ canvas.filter-smooth {
   mix-blend-mode: multiply;
 }
 
+/* Mouse Look Crosshair */
+.mouse-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 6;
+}
+.mouse-crosshair::before,
+.mouse-crosshair::after {
+  content: '';
+  position: absolute;
+  background: rgba(200, 168, 106, 0.85);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.95);
+}
+.mouse-crosshair::before {
+  top: 6px;
+  left: 0;
+  width: 14px;
+  height: 2px;
+}
+.mouse-crosshair::after {
+  top: 0;
+  left: 6px;
+  width: 2px;
+  height: 14px;
+}
+.mouse-crosshair[hidden] {
+  display: none;
+}
+
+/* Mouse Look HUD Badge */
+.mouselook-badge {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 16, 23, 0.9);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--gold);
+  pointer-events: none;
+  z-index: 7;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+}
+.mouselook-badge small {
+  color: #a0aec0;
+  font-size: 10px;
+}
+.mouselook-badge kbd {
+  padding: 1px 4px;
+  font-size: 9px;
+}
+.mouselook-badge[hidden] {
+  display: none;
+}
+
 /* In-game Pause Overlay */
 .pause-overlay {
   position: absolute;

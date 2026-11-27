@@ -246,6 +246,7 @@ async function boot() {
 
   running = true;
   document.querySelectorAll('[data-scan]').forEach(button => { button.disabled = false; });
+  if ($('mouselook')) $('mouselook').disabled = false;
   if ($('pause')) $('pause').disabled = false;
   if ($('sound')) $('sound').disabled = false;
   if ($('export')) $('export').disabled = false;
@@ -292,6 +293,9 @@ function unlockAudio() {
 function setPaused(shouldPause) {
   if (!running) return;
   paused = Boolean(shouldPause);
+  if (paused) {
+    exitMouseLock();
+  }
   releaseKeys();
   call('wasm_set_paused', null, ['number'], [Number(paused)]);
   if ($('pause')) $('pause').textContent = paused ? 'Resume' : 'Pause';
@@ -417,6 +421,12 @@ for (const name of ['keydown', 'keyup']) {
   window.addEventListener(name, e => {
     if (!running || e.ctrlKey || e.metaKey || e.altKey) return;
     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 'Escape' && isMouseLocked()) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      exitMouseLock();
+      return;
+    }
     const scan = keyMap[e.key];
     if (!scan) return;
     e.preventDefault();
@@ -431,6 +441,195 @@ for (const name of ['keydown', 'keyup']) {
       document.querySelectorAll(`[data-scan="${scan}"]`).forEach(b => b.classList.remove('pressed'));
     }
   }, true);
+}
+
+// ----------------------------------------------------
+// FPS 3D Mouse Look & Pointer Lock System
+// ----------------------------------------------------
+let mouseAccumX = 0;
+let mouseAccumY = 0;
+let mouseAnimFrame = null;
+const MOUSE_SENSITIVITY = 0.8;
+const THRESHOLD = 1.0;
+
+function isMouseLocked() {
+  const elem = document.pointerLockElement || document.mozPointerLockElement || document.webkitPointerLockElement;
+  return elem === $('canvas');
+}
+
+function requestMouseLock() {
+  if (!running || paused) return;
+  const canvas = $('canvas');
+  if (!canvas) return;
+  const req = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+  if (req) {
+    try {
+      req.call(canvas);
+    } catch (e) {
+      log('Pointer lock error: ' + e);
+    }
+  }
+}
+
+function exitMouseLock() {
+  const exit = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
+  if (exit) {
+    try {
+      exit.call(document);
+    } catch (e) {}
+  }
+}
+
+function updateMouseLockState() {
+  const locked = isMouseLocked();
+  if ($('mouselook')) {
+    $('mouselook').classList.toggle('active', locked);
+    $('mouselook').textContent = locked ? '🖱️ Free Mouse (Esc)' : '🖱️ Mouse Look';
+  }
+  if ($('mouse-crosshair')) $('mouse-crosshair').hidden = !locked;
+  if ($('mouselook-badge')) $('mouselook-badge').hidden = !locked;
+
+  if (!locked) {
+    keyUp('mouse:turnLeft', true);
+    keyUp('mouse:turnRight', true);
+    keyUp('mouse:lookUp', true);
+    keyUp('mouse:lookDown', true);
+    keyUp('mouse:attack', true);
+    keyUp('mouse:spell', true);
+    document.querySelectorAll('[data-scan="50"], [data-scan="52"], [data-scan="54"], [data-scan="56"], [data-scan="167"], [data-scan="55"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumX = 0;
+    mouseAccumY = 0;
+    if (mouseAnimFrame) {
+      cancelAnimationFrame(mouseAnimFrame);
+      mouseAnimFrame = null;
+    }
+  } else {
+    unlockAudio();
+    if (!mouseAnimFrame) {
+      mouseAnimFrame = requestAnimationFrame(processMouseLook);
+    }
+  }
+}
+
+['pointerlockchange', 'mozpointerlockchange', 'webkitpointerlockchange'].forEach(evt => {
+  document.addEventListener(evt, updateMouseLockState);
+});
+
+function processMouseLook() {
+  if (!isMouseLocked()) {
+    mouseAnimFrame = null;
+    return;
+  }
+
+  // Turn Left (Key 4 / scan 52) / Turn Right (Key 6 / scan 54)
+  if (mouseAccumX > THRESHOLD) {
+    keyDown(54, 'mouse:turnRight');
+    keyUp('mouse:turnLeft', true);
+    document.querySelectorAll('[data-scan="54"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="52"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumX -= Math.max(0.7, mouseAccumX * 0.32);
+    if (mouseAccumX < 0) mouseAccumX = 0;
+  } else if (mouseAccumX < -THRESHOLD) {
+    keyDown(52, 'mouse:turnLeft');
+    keyUp('mouse:turnRight', true);
+    document.querySelectorAll('[data-scan="52"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="54"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumX += Math.max(0.7, -mouseAccumX * 0.32);
+    if (mouseAccumX > 0) mouseAccumX = 0;
+  } else {
+    keyUp('mouse:turnRight');
+    keyUp('mouse:turnLeft');
+    document.querySelectorAll('[data-scan="52"], [data-scan="54"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumX = 0;
+  }
+
+  // Look Up (Key 2 / scan 50) / Look Down (Key 8 / scan 56)
+  if (mouseAccumY < -THRESHOLD) {
+    keyDown(50, 'mouse:lookUp');
+    keyUp('mouse:lookDown', true);
+    document.querySelectorAll('[data-scan="50"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="56"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumY += Math.max(0.7, -mouseAccumY * 0.32);
+    if (mouseAccumY > 0) mouseAccumY = 0;
+  } else if (mouseAccumY > THRESHOLD) {
+    keyDown(56, 'mouse:lookDown');
+    keyUp('mouse:lookUp', true);
+    document.querySelectorAll('[data-scan="56"]').forEach(b => b.classList.add('pressed'));
+    document.querySelectorAll('[data-scan="50"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumY -= Math.max(0.7, mouseAccumY * 0.32);
+    if (mouseAccumY < 0) mouseAccumY = 0;
+  } else {
+    keyUp('mouse:lookUp');
+    keyUp('mouse:lookDown');
+    document.querySelectorAll('[data-scan="50"], [data-scan="56"]').forEach(b => b.classList.remove('pressed'));
+    mouseAccumY = 0;
+  }
+
+  mouseAnimFrame = requestAnimationFrame(processMouseLook);
+}
+
+window.addEventListener('mousemove', e => {
+  if (!isMouseLocked() || !running || paused) return;
+
+  const dx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+  const dy = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+  const clampedX = Math.max(-50, Math.min(50, dx));
+  const clampedY = Math.max(-50, Math.min(50, dy));
+
+  mouseAccumX += clampedX * MOUSE_SENSITIVITY;
+  mouseAccumY += clampedY * MOUSE_SENSITIVITY;
+
+  mouseAccumX = Math.max(-70, Math.min(70, mouseAccumX));
+  mouseAccumY = Math.max(-70, Math.min(70, mouseAccumY));
+}, { passive: true });
+
+window.addEventListener('mousedown', e => {
+  if (!isMouseLocked() || !running || paused) return;
+  unlockAudio();
+  if (e.button === 0) {
+    e.preventDefault();
+    keyDown(167, 'mouse:attack');
+    document.querySelectorAll('[data-scan="167"]').forEach(b => b.classList.add('pressed'));
+  } else if (e.button === 2) {
+    e.preventDefault();
+    keyDown(55, 'mouse:spell');
+    document.querySelectorAll('[data-scan="55"]').forEach(b => b.classList.add('pressed'));
+  }
+});
+
+window.addEventListener('mouseup', e => {
+  if (!isMouseLocked()) return;
+  if (e.button === 0) {
+    keyUp('mouse:attack');
+    document.querySelectorAll('[data-scan="167"]').forEach(b => b.classList.remove('pressed'));
+  } else if (e.button === 2) {
+    keyUp('mouse:spell');
+    document.querySelectorAll('[data-scan="55"]').forEach(b => b.classList.remove('pressed'));
+  }
+});
+
+window.addEventListener('contextmenu', e => {
+  if (isMouseLocked()) e.preventDefault();
+});
+
+if ($('mouselook')) {
+  $('mouselook').onclick = () => {
+    if (isMouseLocked()) {
+      exitMouseLock();
+    } else {
+      requestMouseLock();
+    }
+  };
+}
+
+if ($('canvas')) {
+  $('canvas').addEventListener('click', () => {
+    if (!running || paused) return;
+    if (!isMouseLocked()) {
+      requestMouseLock();
+    }
+  });
 }
 
 // On-screen clickable buttons with robust multi-touch support

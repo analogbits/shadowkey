@@ -19,14 +19,15 @@ Hosted online on GitHub Pages: **[https://analogbits.github.io/shadowkey/](https
 
 ## Controls (MacBook Pro, Desktop & Mobile)
 
-| Action | MacBook Pro / PC Keyboard | Handheld Keypad |
+| Action | MacBook Pro / PC Keyboard & Mouse | Handheld Keypad |
 | :--- | :--- | :--- |
 | **Move / Walk / Strafe** | <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or <kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> | D-Pad |
-| **Attack / Confirm / Action** | <kbd>Space</kbd> or <kbd>Return ⏎</kbd> | Keypad **5** or Center **OK** |
-| **Cast Active Spell** | <kbd>F</kbd> (or <kbd>7</kbd>) | Keypad **7** |
-| **Look Up / Look Down** | <kbd>I</kbd> / <kbd>K</kbd> (or <kbd>2</kbd> / <kbd>8</kbd>) | Keypad **2** / **8** |
+| **3D Mouse Look (360°)** | **Mouse Movement** (Click canvas to lock, <kbd>Esc</kbd> to free) | Keypad **2** / **4** / **6** / **8** |
+| **Attack / Confirm / Interact** | **Left Click** or <kbd>Space</kbd> or <kbd>Return ⏎</kbd> | Keypad **5** or Center **OK** |
+| **Cast Active Spell** | **Right Click** or <kbd>F</kbd> (or <kbd>7</kbd>) | Keypad **7** |
 | **Turn Left / Turn Right** | <kbd>J</kbd> / <kbd>L</kbd> (or <kbd>4</kbd> / <kbd>6</kbd>) | Keypad **4** / **6** |
-| **System Menu** | <kbd>Esc</kbd> or <kbd>Q</kbd> | Left Menu button |
+| **Look Up / Look Down** | <kbd>I</kbd> / <kbd>K</kbd> (or <kbd>2</kbd> / <kbd>8</kbd>) | Keypad **2** / **8** |
+| **Free Mouse / System Menu** | <kbd>Esc</kbd> (Frees mouse if locked; opens menu if free) or <kbd>Q</kbd> | Left Menu button |
 | **Inventory** | <kbd>Tab ⇥</kbd> or <kbd>E</kbd> | Right Menu button |
 | **Map & Quest Log** | <kbd>M</kbd> (or <kbd>1</kbd>) | Keypad **1** |
 | **Character Stats** | <kbd>C</kbd> (or <kbd>3</kbd>) | Keypad **3** |
