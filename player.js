@@ -55,7 +55,7 @@ async function persist() {
 function loadScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'eka2l1.js';
+    script.src = 'eka2l1.js?v=13';
     script.onload = resolve;
     script.onerror = () => reject(new Error('The emulator download failed. Reload to retry.'));
     document.head.append(script);
@@ -217,6 +217,9 @@ async function boot() {
   progress(5, 'Loading emulator…');
   await loadScript();
 
+  if (window.ek_webaudio_init) window.ek_webaudio_init();
+  if (window.__ekAudio?.ensureCtx) window.__ekAudio.ensureCtx();
+
   mod = await createEKA2L1Module({
     canvas: $('canvas'),
     noInitialRun: true,
@@ -225,6 +228,17 @@ async function boot() {
     printErr: log,
     onAbort: why => fail(new Error(String(why)))
   });
+
+  if (mod.initAudio) mod.initAudio();
+  if (window.__ekAudio?.ensureCtx) window.__ekAudio.ensureCtx();
+
+  // Allow up to 300ms for AudioWorklet module compilation before proceeding
+  if (window.__ekAudio && !window.__ekAudio.workletReady && !window.__ekAudio.workletFailed) {
+    const t0 = performance.now();
+    while (!window.__ekAudio.workletReady && !window.__ekAudio.workletFailed && performance.now() - t0 < 300) {
+      await new Promise(r => setTimeout(r, 20));
+    }
+  }
 
   call('wasm_set_jit', null, ['number'], [acceleration]);
   mod.FS.mkdirTree(SAVE_ROOT);
@@ -297,17 +311,13 @@ async function boot() {
 
 function unlockAudio() {
   try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (AudioContext) {
-      if (!window.__globalAudioCtx) {
-        window.__globalAudioCtx = new AudioContext();
+    if (window.__ekAudio?.ensureCtx) {
+      const ctx = window.__ekAudio.ensureCtx();
+      if (ctx && (ctx.state === 'suspended' || ctx.state === 'interrupted')) {
+        ctx.resume().catch(() => {});
       }
-      if (window.__globalAudioCtx.state === 'suspended' || window.__globalAudioCtx.state === 'interrupted') {
-        window.__globalAudioCtx.resume().catch(() => {});
-      }
-    }
-    if (window.__ekAudio?.ctx && (window.__ekAudio.ctx.state === 'suspended' || window.__ekAudio.ctx.state === 'interrupted')) {
-      window.__ekAudio.ctx.resume().catch(() => {});
+    } else if (window.ek_webaudio_init) {
+      window.ek_webaudio_init();
     }
   } catch (e) {}
 }
